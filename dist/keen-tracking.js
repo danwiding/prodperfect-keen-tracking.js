@@ -285,7 +285,8 @@ module.exports = {
   'deferEvents': deferEvents,
   'queueCapacity': queueCapacity,
   'queueInterval': queueInterval,
-  'recordDeferredEvents': recordDeferredEvents
+  'recordDeferredEvents': recordDeferredEvents,
+  'unloadDeferredEvents': unloadDeferredEvents
 };
 function deferEvent(eventCollection, eventBody){
   if (arguments.length !== 2 || typeof eventCollection !== 'string') {
@@ -340,6 +341,9 @@ function recordDeferredEvents(){
     clonedQueueEvents = JSON.parse(JSON.stringify(self.queue.events));
     self.queue = queue();
     self.queue.config = clonedQueueConfig;
+    self.queue.on('flush', function () {
+      self.recordDeferredEvents();
+    });
     self.emit('recordDeferredEvents', clonedQueueEvents);
     self.recordEvents(clonedQueueEvents, function(err, res){
       if (err) {
@@ -351,6 +355,12 @@ function recordDeferredEvents(){
     });
   }
   return self;
+}
+function unloadDeferredEvents(){
+    self.queue.pause();
+    each(self.queue.events, function (events, collection) {
+      self.recordEvent(collection, events);
+    });
 }
 function handleValidationError(message){
   var err = 'Event(s) not deferred: ' + message;
@@ -645,8 +655,12 @@ function recordEvent(eventCollection, eventBody, callback, async){
         sendXhr.call(this, 'POST', url, extendedEventBody, cb);
         break;
       case 'beacon':
-        if (getRequestUrlOkLength) {
-          sendBeacon.call(this, getRequestUrl, cb);
+        if (navigator.sendBeacon) {
+          var beacon_url = this.url('events', encodeURIComponent(eventCollection),{ api_key: this.writeKey()});
+          navigator.sendBeacon(beacon_url, JSON.stringify(extendedEventBody));
+        }
+        else if (getRequestUrlOkLength) {
+            sendBeacon.call(this, getRequestUrl, cb);
         }
         else {
           attemptPostXhr.call(this, url, extendedEventBody,
@@ -1083,15 +1097,7 @@ module.exports = function(ctx){
       each(ctx.domListeners[eventType], function(handlers, key){
         if (matches(target, key)) {
           each(handlers, function(fn, i){
-            if ('click' === eventType && 'A' === target.nodeName) {
-              deferClickEvent(evt, target, fn);
-            }
-            else if ('submit' === eventType && 'FORM' === target.nodeName) {
-              deferFormSubmit(evt, target, fn);
-            }
-            else {
               fn(evt);
-            }
           });
         }
         else if ('window' === key) {

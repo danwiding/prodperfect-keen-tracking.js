@@ -152,18 +152,21 @@ gulp.task('test:sauce', ['build', 'test:browserify'], function(){
   });
 });
 
-gulp.task('deploy', ['test:mocha', 'test:karma'], function() {
+gulp.task('deploy', ['build'], function() {
 
   if (!process.env.AWS_KEY || !process.env.AWS_SECRET) {
     throw 'AWS credentials are required!';
   }
-
+  debugger;
   var publisher = aws.create({
     key: process.env.AWS_KEY,
     secret: process.env.AWS_SECRET,
-    bucket: 'keen-js' // pkg.name
+    bucket: 'prodperfect-keen-js', // pkg.name
+    endpoint: 's3.us-east-2.amazonaws.com',
+    region: 'us-east-2'
   });
-
+  debugger;
+  console.log("wtf");
   var cacheLife = (1000 * 60 * 60 * 24 * 365); // 1 year
 
   var headers = {
