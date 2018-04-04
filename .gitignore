@@ -7,9 +7,6 @@ test/unit/build/*
 dist/*.map
 .env
 
-# IDE Generated Items #
-#######################
 .idea
 .vagrant
 cookbooks
-.DS_Store
