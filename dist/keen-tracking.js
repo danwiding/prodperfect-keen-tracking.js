@@ -132,6 +132,8 @@ function initAutoTracking(lib) {
       ignoreFormFieldTypes: ['password'],
       recordClicks: true,
       recordFormSubmits: true,
+      recordInputChanges: false,
+      recordPageUnloads: false,
       recordPageViews: true,
       recordScrollState: true
     }, obj);
@@ -149,11 +151,14 @@ function initAutoTracking(lib) {
         scrollState = helpers.getScrollState(scrollState);
       });
     }
+    var tracker_loaded_at_time = now.toISOString();
     client.extendEvents(function() {
       var browserProfile = helpers.getBrowserProfile();
       return {
         tracked_by: pkg.name + '-' + pkg.version,
-        local_time_full: new Date(),
+        tracker_load_uuid: helpers.getUniqueId(),
+        tracker_loaded_at: tracker_loaded_at_time,
+        local_time_full: new Date().toString(),
         user: {
           uuid: uuid
         },
@@ -231,11 +236,10 @@ function initAutoTracking(lib) {
       };
     });
     if (options.recordClicks === true) {
-      utils.listener('a, a *').on('click', function(e) {
+      utils.listener('*').on('click', function(e) {
         var el = e.target;
         var props = {
           element: helpers.getDomNodeProfile(el),
-          local_time_full: new Date(),
           page: {
             scroll_state: scrollState
           }
@@ -257,13 +261,29 @@ function initAutoTracking(lib) {
             method: el.method
           },
           element: helpers.getDomNodeProfile(el),
-          local_time_full: new Date(),
           page: {
             scroll_state: scrollState
           }
         };
         client.recordEvent('form_submissions', props);
       });
+    }
+    if (options.recordInputChanges === true) {
+      utils.listener('*').on('change', function (e) {
+        var el = e.target;
+        var props = {
+          element: helpers.getDomNodeProfile(el),
+          page: {
+            scroll_state: helpers.getScrollState
+          }
+        };
+        client.recordEvent('changes', props);
+      });
+    }
+    if (options.recordPageUnloads === true && window.addEventListener) {
+      window.addEventListener('beforeunload', function (e) {
+        client.recordEvent('pageunloads');
+      }, false);
     }
     if (options.recordPageViews === true) {
       client.recordEvent('pageviews');
@@ -1576,7 +1596,7 @@ timer.prototype.clear = function(){
     debug: false,
     enabled: true,
     loaded: false,
-    version: '1.4.0'
+    version: '1.5.1'
   });
   Client.helpers = Client.helpers || {};
   Client.resources = Client.resources || {};
@@ -1853,7 +1873,7 @@ function serialize(data){
 },{"./each":28,"./extend":29}],32:[function(require,module,exports){
 module.exports={
   "name": "keen-tracking",
-  "version": "1.4.0",
+  "version": "1.5.1",
   "description": "Data Collection SDK for Keen IO",
   "main": "lib/server.js",
   "browser": "lib/browser.js",
