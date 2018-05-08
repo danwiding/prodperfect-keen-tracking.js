@@ -163,13 +163,14 @@ function initAutoTracking(lib) {
     client.extendEvents(function() {
       var browserProfile = helpers.getBrowserProfile();
       return {
-        tracked_by: pkg.name + '-' + pkg.version,
-        tracker_load_uuid: tracker_load_uuid_value,
-        tracker_loaded_at: tracker_loaded_at_time,
+        iso_time_full: new Date().toISOString(),
         local_time_full: new Date().toString(),
         session: {
           session_uuid: session_uuid
         },
+        tracked_by: pkg.name + '-' + pkg.version,
+        tracker_load_uuid: tracker_load_uuid_value,
+        tracker_loaded_at: tracker_loaded_at_time,
         user: {
           uuid: uuid
         },
@@ -238,7 +239,7 @@ function initAutoTracking(lib) {
             {
               name: 'keen:date_time_parser',
               input: {
-                date_time: 'local_time_full'
+                date_time: 'iso_time_full'
               },
               output: 'time.local'
             }
@@ -265,10 +266,15 @@ function initAutoTracking(lib) {
           disabled: options.ignoreDisabledFormFields,
           ignoreTypes: options.ignoreFormFieldTypes
         };
+        var fields = utils.serializeForm(el, serializerOptions);
+        var keys = Object.keys(fields);
+        for (var x = 0; x < keys.length; x++) {
+          fields[keys[x]] = '---REDACTED---';
+        }
         var props = {
           form: {
             action: el.action,
-            fields: utils.serializeForm(el, serializerOptions),
+            fields: fields,
             method: el.method
           },
           element: helpers.getDomNodeProfile(el),
@@ -1607,7 +1613,7 @@ timer.prototype.clear = function(){
     debug: false,
     enabled: true,
     loaded: false,
-    version: '1.5.1'
+    version: '1.5.2'
   });
   Client.helpers = Client.helpers || {};
   Client.resources = Client.resources || {};
@@ -1884,7 +1890,7 @@ function serialize(data){
 },{"./each":28,"./extend":29}],32:[function(require,module,exports){
 module.exports={
   "name": "keen-tracking",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Data Collection SDK for Keen IO",
   "main": "lib/server.js",
   "browser": "lib/browser.js",
