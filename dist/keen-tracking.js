@@ -135,7 +135,8 @@ function initAutoTracking(lib) {
       recordInputChanges: false,
       recordPageUnloads: false,
       recordPageViews: true,
-      recordScrollState: true
+      recordScrollState: true,
+      redactText: false
     }, obj);
     var now = new Date();
     var cookie = new utils.cookie('keen');
@@ -304,6 +305,14 @@ function initAutoTracking(lib) {
     }
     if (options.recordPageViews === true) {
       client.recordEvent('pageviews');
+    }
+    if (options.redactText === true) {
+      client.extendEvents({
+        element: {
+          text: '---REDACTED---',
+          textContent: '---REDACTED---'
+        }
+      });
     }
     return client;
   };
@@ -520,9 +529,12 @@ function getDomNodeProfile(el) {
     id: el.id,
     method: el.method,
     name: el.name,
+    ng_click: el.attributes['ng-click'],
+    ng_model: el.attributes['ng-model'],
     node_name: el.nodeName,
     selector: getDomNodePath(el),
     text: el.text,
+    textContent: el.textContent ? el.textContent.substring(0, 1000) : null,
     title: el.title,
     type: el.type,
     x_position: el.offsetLeft || el.clientLeft || null,
@@ -1613,7 +1625,7 @@ timer.prototype.clear = function(){
     debug: false,
     enabled: true,
     loaded: false,
-    version: '1.5.2'
+    version: '1.5.3'
   });
   Client.helpers = Client.helpers || {};
   Client.resources = Client.resources || {};
@@ -1890,7 +1902,7 @@ function serialize(data){
 },{"./each":28,"./extend":29}],32:[function(require,module,exports){
 module.exports={
   "name": "keen-tracking",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Data Collection SDK for Keen IO",
   "main": "lib/server.js",
   "browser": "lib/browser.js",
@@ -1900,7 +1912,8 @@ module.exports={
   },
   "scripts": {
     "start": "gulp with-tests",
-    "test": "gulp test:cli"
+    "test": "gulp test:cli",
+    "regressiontest": "node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve'"
   },
   "bugs": "https://github.com/keen/keen-tracking.js/issues",
   "author": "Dustin Larimer <dustin@keen.io> (https://keen.io/)",
@@ -1948,6 +1961,10 @@ module.exports={
     "phantomjs": "^1.9.7-15",
     "proclaim": "^3.3.0",
     "requirejs": "^2.3.5",
+    "testcafe": "^0.20.2",
+    "testcafe-browser-provider-browserstack": "^1.3.0",
+    "testcafe-browser-provider-puppeteer": "^1.3.0",
+    "testcafe-browser-provider-saucelabs": "^1.3.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }

@@ -76,6 +76,13 @@ gulp.task('connect', ['build'], function() {
     });
 });
 
+gulp.task('serve', ['build'], function () {
+  return connect.server({
+    root: [__dirname, 'dist'],
+    port: 8000
+  });
+});
+
 gulp.task('watch', ['connect'], function() {
   return gulp.watch([ './*.js', 'lib/**/*.js' ], ['build']);
 });
