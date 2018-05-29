@@ -135,8 +135,7 @@ function initAutoTracking(lib) {
       recordInputChanges: false,
       recordPageUnloads: false,
       recordPageViews: true,
-      recordScrollState: true,
-      redactText: false
+      recordScrollState: true
     }, obj);
     var now = new Date();
     var cookie = new utils.cookie('keen');
@@ -305,14 +304,6 @@ function initAutoTracking(lib) {
     }
     if (options.recordPageViews === true) {
       client.recordEvent('pageviews');
-    }
-    if (options.redactText === true) {
-      client.extendEvents({
-        element: {
-          text: '---REDACTED---',
-          textContent: '---REDACTED---'
-        }
-      });
     }
     return client;
   };
@@ -534,7 +525,6 @@ function getDomNodeProfile(el) {
     node_name: el.nodeName,
     selector: getDomNodePath(el),
     text: el.text,
-    textContent: el.textContent ? el.textContent.substring(0, 1000) : null,
     title: el.title,
     type: el.type,
     x_position: el.offsetLeft || el.clientLeft || null,
