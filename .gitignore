@@ -2,9 +2,9 @@
 .DS_Store
 bower_components
 node_modules
-test/unit/build/*
 .awspublish-keen-js
-dist/*.map
+demo-config.js
+
 .env
 
 .idea
