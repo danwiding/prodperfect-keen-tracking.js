@@ -1297,8 +1297,8 @@ function getDomNodeProfile(el) {
     id: el.id,
     method: el.method,
     name: el.name,
-	ng_click: el.getAttribute('ng-click'),
-	ng_model: el.getAttribute('ng-model'),
+    ng_click: el.getAttribute('ng-click'),
+    ng_model: el.getAttribute('ng-model'),
     node_name: el.nodeName,
     selector: (0, _getDomNodePath.getDomNodePath)(el),
     text: el.text,
@@ -1423,7 +1423,7 @@ function getDocumentDescription() {
 /* 20 */
 /***/ (function(module) {
 
-module.exports = {"name":"keen-tracking","version":"2.0.0","description":"Data Collection SDK for Keen IO","main":"dist/node/keen-tracking.js","browser":"dist/keen-tracking.js","repository":{"type":"git","url":"https://github.com/keen/keen-tracking.js.git"},"scripts":{"start":"NODE_ENV=development webpack-dev-server","test":"NODE_ENV=test jest && NODE_ENV=test TEST_ENV=node jest","regressiontest": "node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve'","test:watch":"NODE_ENV=test jest --watch","test:node:watch":"NODE_ENV=test TEST_ENV=node jest --watch","build":"NODE_ENV=production webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 webpack -p && npm run build:node","build:node":"TARGET=node NODE_ENV=production webpack -p","profile":"webpack --profile --json > stats.json","analyze":"webpack-bundle-analyzer stats.json /dist","preversion":"npm run build && npm run test","version":"git add .","postversion":"git push && git push --tags","demo":"node ./test/demo/index.node.js"},"bugs":"https://github.com/keen/keen-tracking.js/issues","author":"Keen IO <team@keen.io> (https://keen.io/)","contributors":["Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)","Eric Anderson <eric@keen.io> (https://github.com/aroc)","Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)","Alex Kleissner <alex@keen.io> (https://github.com/hex337)","Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)"],"license":"MIT","dependencies":{"component-emitter":"^1.2.0","js-cookie":"2.1.0","keen-core":"^0.1.3"},"devDependencies":{"babel-loader":"^7.1.4","babel-plugin-transform-es2015-modules-commonjs":"^6.26.2","babel-plugin-transform-object-rest-spread":"^6.26.0","babel-preset-env":"^1.7.0","eslint":"^4.19.1","eslint-config-airbnb":"^16.1.0","eslint-loader":"^2.0.0","eslint-plugin-import":"^2.11.0","eslint-plugin-jsx-a11y":"^6.0.3","gulp":"^3.8.11","gulp-awspublish":"0.0.23","gulp-rename":"^1.2.2","gulp-replace":"^0.5.3","html-loader":"^0.5.5","html-webpack-plugin":"^3.2.0","jest":"^22.4.3","nock":"^9.2.6","regenerator-runtime":"^0.11.1","testcafe": "^0.20.2","testcafe-browser-provider-browserstack": "^1.3.0","testcafe-browser-provider-puppeteer": "^1.3.0","testcafe-browser-provider-saucelabs": "^1.3.0","webpack":"^4.5.0","webpack-bundle-analyzer":"^2.11.1","webpack-cli":"^2.0.13","webpack-dev-server":"^3.1.1","xhr-mock":"^2.3.2"}};
+module.exports = {"name":"keen-tracking","version":"2.0.1","description":"Data Collection SDK for Keen IO","main":"dist/node/keen-tracking.js","browser":"dist/keen-tracking.js","repository":{"type":"git","url":"https://github.com/keen/keen-tracking.js.git"},"scripts":{"start":"NODE_ENV=development webpack-dev-server","test":"NODE_ENV=test jest && NODE_ENV=test TEST_ENV=node jest","test:watch":"NODE_ENV=test jest --watch","test:node:watch":"NODE_ENV=test TEST_ENV=node jest --watch","test:regression":"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve'","regressiontest":"npm run test:regression","build":"NODE_ENV=production webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 webpack -p && npm run build:node","build:node":"TARGET=node NODE_ENV=production webpack -p","profile":"webpack --profile --json > stats.json","analyze":"webpack-bundle-analyzer stats.json /dist","preversion":"npm run build && npm run test","version":"git add .","postversion":"git push && git push --tags","demo":"node ./test/demo/index.node.js"},"bugs":"https://github.com/keen/keen-tracking.js/issues","author":"Keen IO <team@keen.io> (https://keen.io/)","contributors":["Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)","Eric Anderson <eric@keen.io> (https://github.com/aroc)","Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)","Alex Kleissner <alex@keen.io> (https://github.com/hex337)","Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)"],"license":"MIT","dependencies":{"component-emitter":"^1.2.0","js-cookie":"2.1.0","keen-core":"^0.1.3"},"devDependencies":{"babel-loader":"^7.1.4","babel-plugin-transform-es2015-modules-commonjs":"^6.26.2","babel-plugin-transform-object-rest-spread":"^6.26.0","babel-preset-env":"^1.7.0","eslint":"^4.19.1","eslint-config-airbnb":"^16.1.0","eslint-loader":"^2.0.0","eslint-plugin-import":"^2.11.0","eslint-plugin-jsx-a11y":"^6.0.3","gulp":"^3.8.11","gulp-awspublish":"0.0.23","gulp-connect":"^5.5.0","gulp-rename":"^1.2.2","gulp-replace":"^0.5.3","html-loader":"^0.5.5","html-webpack-plugin":"^3.2.0","jest":"^22.4.3","nock":"^9.2.6","regenerator-runtime":"^0.11.1","testcafe":"^0.20.3","testcafe-browser-provider-browserstack":"^1.3.0","testcafe-browser-provider-puppeteer":"^1.3.0","testcafe-browser-provider-saucelabs":"^1.3.0","webpack":"^4.5.0","webpack-bundle-analyzer":"^2.11.1","webpack-cli":"^2.0.13","webpack-dev-server":"^3.1.1","xhr-mock":"^2.3.2"}};
 
 /***/ }),
 /* 21 */
@@ -1473,13 +1473,15 @@ function initAutoTrackingCore(lib) {
       } : {};
       cookie.set('uuid', uuid, cookieDomain);
     }
+
     var session_cookie = new utils.cookie('prodperfect_session');
     var session_uuid = session_cookie.get('session_uuid');
     if (!session_uuid) {
       session_uuid = helpers.getUniqueId();
     }
     session_cookie.set('session_uuid', session_uuid);
-    session_cookie.expire(1/48);
+    session_cookie.expire(1 / 48);
+
     var scrollState = {};
     if (options.recordScrollState) {
       scrollState = helpers.getScrollState();
@@ -1487,8 +1489,10 @@ function initAutoTrackingCore(lib) {
         scrollState = helpers.getScrollState(scrollState);
       });
     }
+
     var tracker_loaded_at_time = now.toISOString();
     var tracker_load_uuid_value = helpers.getUniqueId();
+
     client.extendEvents(function () {
       var browserProfile = helpers.getBrowserProfile();
       return {
@@ -1497,7 +1501,7 @@ function initAutoTrackingCore(lib) {
         session: {
           session_uuid: session_uuid
         },
-        tracked_by:  _package2.default.name + '-' + _package2.default.version,
+        tracked_by: _package2.default.name + '-' + _package2.default.version,
         tracker_load_uuid: tracker_load_uuid_value,
         tracker_loaded_at: tracker_loaded_at_time,
         user: {
@@ -1615,6 +1619,7 @@ function initAutoTrackingCore(lib) {
         client.recordEvent('form_submissions', props);
       });
     }
+
     if (options.recordInputChanges === true) {
       utils.listener('*').on('change', function (e) {
         var el = e.target;
@@ -1627,11 +1632,13 @@ function initAutoTrackingCore(lib) {
         client.recordEvent('changes', props);
       });
     }
+
     if (options.recordPageUnloads === true && window.addEventListener) {
       window.addEventListener('beforeunload', function (e) {
         client.recordEvent('pageunloads');
       }, false);
     }
+
     if (options.recordPageViews === true) {
       client.recordEvent('pageviews');
     }
@@ -1754,11 +1761,12 @@ function recordDeferredEvents() {
   }
   return self;
 }
-function unloadDeferredEvents(){
-    self.queue.pause();
-    each(self.queue.events, function (events, collection) {
-      self.recordEvent(collection, events);
-    });
+
+function unloadDeferredEvents() {
+  self.queue.pause();
+  (0, _each2.default)(self.queue.events, function (events, collection) {
+    self.recordEvent(collection, events);
+  });
 }
 
 function handleValidationError(message) {
@@ -1921,24 +1929,19 @@ function recordEvent(eventCollection, eventBody, callback, asyncMode) {
         break;
       case 'beacon':
         if (navigator.sendBeacon) {
-          var beacon_url = this.url('events', encodeURIComponent(eventCollection),{ api_key: this.writeKey()});
+          var beacon_url = this.url('events', encodeURIComponent(eventCollection), { api_key: this.writeKey() });
           navigator.sendBeacon(beacon_url, JSON.stringify(extendedEventBody));
-        }
-        else if (getRequestUrlOkLength) {
-            sendBeacon.call(this, getRequestUrl, cb);
-        }
-        else {
-          attemptPostXhr.call(this, url, extendedEventBody,
-              'Beacon URL length exceeds current browser limit, and XHR is not supported.', cb)
+        } else if (getRequestUrlOkLength) {
+          sendBeacon.call(this, getRequestUrl, cb);
+        } else {
+          attemptPostXhr.call(this, url, extendedEventBody, 'Beacon URL length exceeds current browser limit, and XHR is not supported.', cb);
         }
         break;
       default:
         if (getRequestUrlOkLength) {
           sendJSONp.call(this, getRequestUrl, cb);
-        }
-        else {
-          attemptPostXhr.call(this, url, extendedEventBody,
-              'JSONp URL length exceeds current browser limit, and XHR is not supported.', cb)
+        } else {
+          attemptPostXhr.call(this, url, extendedEventBody, 'JSONp URL length exceeds current browser limit, and XHR is not supported.', cb);
         }
         break;
     }
@@ -2409,10 +2412,17 @@ var listenerCore = exports.listenerCore = function listenerCore(ctx) {
       (0, _each2.default)(ctx.domListeners[eventType], function (handlers, key) {
 
         if (matches(target, key)) {
-  		  // FIXME: I think based on your deletions, this comment I merged in is not relevant maybe?
-  		  // Call all handlers for this eventType + node
+          // Call all handlers for this eventType + node
           (0, _each2.default)(handlers, function (fn, i) {
+            // if ('click' === eventType && 'A' === target.nodeName) {
+            //   deferClickEvent(evt, target, fn);
+            // }
+            // else if ('submit' === eventType && 'FORM' === target.nodeName) {
+            //   deferFormSubmit(evt, target, fn);
+            // }
+            // else {
             fn(evt);
+            // }
           });
         } else if ('window' === key) {
           // Call all handlers
@@ -2643,7 +2653,6 @@ module.exports = g;
     debug: false,
     enabled: true,
     loaded: false,
-	  // FIXME: is this right? why did you manually put in 1.5.3? If this is right, might need to update the other location
     version: '__VERSION__'
   });
 

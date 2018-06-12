@@ -2,9 +2,10 @@ var gulp = require('gulp'),
     pkg = require('./package.json');
 
 var aws = require('gulp-awspublish'),
-    connect = require('gulp-connect'), // FIXME: move this and serve to npm?
+    connect = require('gulp-connect'),
     rename = require('gulp-rename');
 
+// FIXME: move this to npm if possible
 gulp.task('serve', function () {
   return connect.server({
     root: [__dirname, 'dist'],
