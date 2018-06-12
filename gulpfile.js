@@ -2,17 +2,17 @@ var gulp = require('gulp'),
     pkg = require('./package.json');
 
 var aws = require('gulp-awspublish'),
+    connect = require('gulp-connect'), // FIXME: move this and serve to npm?
     rename = require('gulp-rename');
 
-// FIXME: Do we still need this?
-gulp.task('serve', ['build'], function () {
+gulp.task('serve', function () {
   return connect.server({
     root: [__dirname, 'dist'],
     port: 8000
   });
 });
 
-gulp.task('deploy', ['build'], function() {
+gulp.task('deploy', function() {
 
   if (!process.env.AWS_KEY || !process.env.AWS_SECRET) {
     throw 'AWS credentials are required!';
