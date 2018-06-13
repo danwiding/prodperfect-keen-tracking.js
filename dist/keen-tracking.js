@@ -1,132 +1,1454 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-(function (global){
-(function(env) {
-  'use strict';
-  var KeenCore = require('./index');
-  var each = require('./utils/each');
-  var extend = require('./utils/extend');
-  var listener = require('./utils/listener')(KeenCore);
-  extend(KeenCore.prototype, require('./record-events-browser'));
-  extend(KeenCore.prototype, require('./defer-events'));
-  extend(KeenCore.prototype, {
-    'extendEvent'      : require('./extend-events').extendEvent,
-    'extendEvents'     : require('./extend-events').extendEvents
-  });
-  extend(KeenCore.prototype, {
-    'initAutoTracking': require('./browser-auto-tracking')(KeenCore)
-  });
-  KeenCore.prototype.trackExternalLink = trackExternalLink;
-  extend(KeenCore.helpers, {
-    'getBrowserProfile'  : require('./helpers/getBrowserProfile'),
-    'getDatetimeIndex'   : require('./helpers/getDatetimeIndex'),
-    'getDomNodePath'     : require('./helpers/getDomNodePath'),
-    'getDomNodeProfile'  : require('./helpers/getDomNodeProfile'),
-    'getScreenProfile'   : require('./helpers/getScreenProfile'),
-    'getScrollState'     : require('./helpers/getScrollState'),
-    'getUniqueId'        : require('./helpers/getUniqueId'),
-    'getWindowProfile'   : require('./helpers/getWindowProfile')
-  });
-  extend(KeenCore.utils, {
-    'cookie'        : require('./utils/cookie'),
-    'deepExtend'    : require('./utils/deepExtend'),
-    'listener'      : listener,
-    'serializeForm' : require('./utils/serializeForm'),
-    'timer'         : require('./utils/timer')
-  });
-  KeenCore.listenTo = function(listenerHash){
-    each(listenerHash, function(callback, key){
-      var split = key.split(' ');
-      var eventType = split[0],
-          selector = split.slice(1, split.length).join(' ');
-      return listener(selector).on(eventType, callback);
-    });
-  };
-  function trackExternalLink(jsEvent, eventCollection, payload, timeout, timeoutCallback){
-    this.emit('error', 'This method has been deprecated. Check out DOM listeners: https://github.com/keen/keen-tracking.js#listeners');
-    var evt = jsEvent,
-      target = (evt.currentTarget) ? evt.currentTarget : (evt.srcElement || evt.target),
-      timer = timeout || 500,
-      triggered = false,
-      targetAttr = '',
-      callback,
-      win;
-    if (target.getAttribute !== void 0) {
-      targetAttr = target.getAttribute('target');
-    } else if (target.target) {
-      targetAttr = target.target;
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(window, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 30);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports) {
+
+module.exports = each;
+
+function each(o, cb, s){
+  var n;
+  if (!o){
+    return 0;
+  }
+  s = !s ? o : s;
+  if (o instanceof Array){
+    // Indexed arrays, needed for Safari
+    for (n=0; n<o.length; n++) {
+      if (cb.call(s, o[n], n, o) === false){
+        return 0;
+      }
     }
-    if ((targetAttr == '_blank' || targetAttr == 'blank') && !evt.metaKey) {
-      win = window.open('about:blank');
-      win.document.location = target.href;
-    }
-    if (target.nodeName === 'A') {
-      callback = function(){
-        if(!triggered && !evt.metaKey && (targetAttr !== '_blank' && targetAttr !== 'blank')){
-          triggered = true;
-          window.location = target.href;
+  } else {
+    // Hashtables
+    for (n in o){
+      if (o.hasOwnProperty(n)) {
+        if (cb.call(s, o[n], n, o) === false){
+          return 0;
         }
-      };
-    }
-    else if (target.nodeName === 'FORM') {
-      callback = function(){
-        if(!triggered){
-          triggered = true;
-          target.submit();
-        }
-      };
-    }
-    else {
-      this.trigger('error', '#trackExternalLink method not attached to an <a> or <form> DOM element');
-    }
-    if (timeoutCallback) {
-      callback = function(){
-        if(!triggered){
-          triggered = true;
-          timeoutCallback();
-        }
-      };
-    }
-    this.recordEvent(eventCollection, payload, callback);
-    setTimeout(callback, timer);
-    if (!evt.metaKey) {
-      return false;
+      }
     }
   }
-  if (!Array.prototype.indexOf){
-    Array.prototype.indexOf = function(elt /*, from*/) {
-      var len = this.length >>> 0;
-      var from = Number(arguments[1]) || 0;
-      from = (from < 0)
-           ? Math.ceil(from)
-           : Math.floor(from);
-      if (from < 0)
-        from += len;
-      for (; from < len; from++) {
-        if (from in this &&
-            this[from] === elt)
-          return from;
+  return 1;
+}
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+module.exports = extend;
+
+function extend(target){
+  for (var i = 1; i < arguments.length; i++) {
+    for (var prop in arguments[i]){
+      target[prop] = arguments[i][prop];
+    }
+  }
+  return target;
+};
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/**
+ * Expose `Emitter`.
+ */
+
+if (true) {
+  module.exports = Emitter;
+}
+
+/**
+ * Initialize a new `Emitter`.
+ *
+ * @api public
+ */
+
+function Emitter(obj) {
+  if (obj) return mixin(obj);
+};
+
+/**
+ * Mixin the emitter properties.
+ *
+ * @param {Object} obj
+ * @return {Object}
+ * @api private
+ */
+
+function mixin(obj) {
+  for (var key in Emitter.prototype) {
+    obj[key] = Emitter.prototype[key];
+  }
+  return obj;
+}
+
+/**
+ * Listen on the given `event` with `fn`.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.on =
+Emitter.prototype.addEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
+    .push(fn);
+  return this;
+};
+
+/**
+ * Adds an `event` listener that will be invoked a single
+ * time then automatically removed.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.once = function(event, fn){
+  function on() {
+    this.off(event, on);
+    fn.apply(this, arguments);
+  }
+
+  on.fn = fn;
+  this.on(event, on);
+  return this;
+};
+
+/**
+ * Remove the given callback for `event` or all
+ * registered callbacks.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.off =
+Emitter.prototype.removeListener =
+Emitter.prototype.removeAllListeners =
+Emitter.prototype.removeEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+
+  // all
+  if (0 == arguments.length) {
+    this._callbacks = {};
+    return this;
+  }
+
+  // specific event
+  var callbacks = this._callbacks['$' + event];
+  if (!callbacks) return this;
+
+  // remove all handlers
+  if (1 == arguments.length) {
+    delete this._callbacks['$' + event];
+    return this;
+  }
+
+  // remove specific handler
+  var cb;
+  for (var i = 0; i < callbacks.length; i++) {
+    cb = callbacks[i];
+    if (cb === fn || cb.fn === fn) {
+      callbacks.splice(i, 1);
+      break;
+    }
+  }
+  return this;
+};
+
+/**
+ * Emit `event` with the given args.
+ *
+ * @param {String} event
+ * @param {Mixed} ...
+ * @return {Emitter}
+ */
+
+Emitter.prototype.emit = function(event){
+  this._callbacks = this._callbacks || {};
+  var args = [].slice.call(arguments, 1)
+    , callbacks = this._callbacks['$' + event];
+
+  if (callbacks) {
+    callbacks = callbacks.slice(0);
+    for (var i = 0, len = callbacks.length; i < len; ++i) {
+      callbacks[i].apply(this, args);
+    }
+  }
+
+  return this;
+};
+
+/**
+ * Return array of callbacks for `event`.
+ *
+ * @param {String} event
+ * @return {Array}
+ * @api public
+ */
+
+Emitter.prototype.listeners = function(event){
+  this._callbacks = this._callbacks || {};
+  return this._callbacks['$' + event] || [];
+};
+
+/**
+ * Check if this emitter has `event` handlers.
+ *
+ * @param {String} event
+ * @return {Boolean}
+ * @api public
+ */
+
+Emitter.prototype.hasListeners = function(event){
+  return !! this.listeners(event).length;
+};
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _keenCore = __webpack_require__(29);
+
+var _keenCore2 = _interopRequireDefault(_keenCore);
+
+var _each = __webpack_require__(0);
+
+var _each2 = _interopRequireDefault(_each);
+
+var _extend = __webpack_require__(1);
+
+var _extend2 = _interopRequireDefault(_extend);
+
+var _queue = __webpack_require__(9);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_keenCore2.default.helpers = _keenCore2.default.helpers || {};
+
+// Install internal queue
+_keenCore2.default.on('client', function (client) {
+  client.extensions = {
+    events: [],
+    collections: {}
+  };
+  client.queue = (0, _queue.queue)();
+  client.queue.on('flush', function () {
+    client.recordDeferredEvents();
+  });
+});
+
+// Accessors
+_keenCore2.default.prototype.writeKey = function (str) {
+  if (!arguments.length) return this.config.writeKey;
+  this.config.writeKey = str ? String(str) : null;
+  return this;
+};
+
+// DEPRECATED
+_keenCore2.default.prototype.setGlobalProperties = function (props) {
+  _keenCore2.default.log('This method has been deprecated. Check out #extendEvents: https://github.com/keen/keen-tracking.js#extend-events');
+  if (!props || typeof props !== 'function') {
+    this.emit('error', 'Invalid value for global properties: ' + props);
+    return;
+  }
+  this.config.globalProperties = props;
+  return this;
+};
+
+exports.default = _keenCore2.default;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getDomNodePath = getDomNodePath;
+function getDomNodePath(el) {
+  if (!el.nodeName) return '';
+
+  var stack = [];
+  while (el.parentNode != null) {
+    // console.log(el.nodeName);
+    var sibCount = 0;
+    var sibIndex = 0;
+    for (var i = 0; i < el.parentNode.childNodes.length; i++) {
+      var sib = el.parentNode.childNodes[i];
+      if (sib.nodeName == el.nodeName) {
+        if (sib === el) {
+          sibIndex = sibCount;
+        }
+        sibCount++;
       }
-      return -1;
+    }
+    if (el.hasAttribute('id') && el.id != '') {
+      stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
+    } else if (sibCount > 1) {
+      stack.unshift(el.nodeName.toLowerCase() + ':eq(' + sibIndex + ')');
+    } else {
+      stack.unshift(el.nodeName.toLowerCase());
+    }
+    el = el.parentNode;
+  }
+
+  return stack.slice(1).join(' > ');
+}
+
+// via: http://stackoverflow.com/a/16742828/2511985
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getWindowProfile = getWindowProfile;
+function getWindowProfile() {
+  var body, html, output;
+
+  if ('undefined' == typeof document) return {};
+
+  body = document.body;
+  html = document.documentElement;
+
+  output = {
+    'height': 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight,
+    'width': 'innerWidth' in window ? window.innerWidth : document.documentElement.offsetWidth,
+    'scrollHeight': Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight) || null
+  };
+
+  if (window.screen) {
+    output.ratio = {
+      'height': window.screen.availHeight ? parseFloat((window.innerHeight / window.screen.availHeight).toFixed(2)) : null,
+      'width': window.screen.availWidth ? parseFloat((window.innerWidth / window.screen.availWidth).toFixed(2)) : null
     };
   }
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = KeenCore;
+
+  return output;
+}
+
+/*
+  Notes:
+    document.documentElement.offsetHeight/Width is a workaround for IE8 and below, where window.innerHeight/Width is undefined
+*/
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getScreenProfile = getScreenProfile;
+function getScreenProfile() {
+  var keys, output;
+
+  if ('undefined' == typeof window || !window.screen) return {};
+
+  keys = ['height', 'width', 'colorDepth', 'pixelDepth', 'availHeight', 'availWidth'];
+  output = {};
+
+  for (var i = 0; i < keys.length; i++) {
+    output[keys[i]] = window.screen[keys[i]] ? window.screen[keys[i]] : null;
   }
-  if (typeof define !== 'undefined' && define.amd) {
-    define('keen-tracking', [], function(){
-      return KeenCore;
+
+  output.orientation = {
+    'angle': window.screen.orientation ? window.screen.orientation['angle'] : 0,
+    'type': window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'
+  };
+
+  return output;
+}
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var deepExtend = exports.deepExtend = function deepExtend(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    // Copy unique items from incoming array
+    if (target instanceof Array && arguments[i] instanceof Array) {
+      for (var j = 0; j < arguments[i].length; j++) {
+        if (target.indexOf(arguments[i][j]) < 0) {
+          target.push(arguments[i][j]);
+        }
+      }
+    }
+    // Blend objects
+    else {
+        for (var prop in arguments[i]) {
+          // Recurse when both contain objects of same name
+          // and incoming is not a null object
+          if (typeof target[prop] !== 'undefined' && _typeof(arguments[i][prop]) === 'object' && arguments[i][prop] !== null) {
+            deepExtend(target[prop], clone(arguments[i][prop]));
+          }
+          // Otherwise just copy it over...
+          else if (arguments[i][prop] !== undefined && typeof arguments[i][prop] !== 'function') {
+              target[prop] = clone(arguments[i][prop]);
+            }
+        }
+      }
+  }
+  return target;
+};
+
+function clone(input) {
+  return JSON.parse(JSON.stringify(input));
+}
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.extendEvent = extendEvent;
+exports.extendEvents = extendEvents;
+exports.getExtendedEventBody = getExtendedEventBody;
+
+var _deepExtend = __webpack_require__(7);
+
+var _each = __webpack_require__(0);
+
+var _each2 = _interopRequireDefault(_each);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function extendEvent(eventCollection, eventModifier) {
+  if (arguments.length !== 2 || typeof eventCollection !== 'string' || 'object' !== (typeof eventModifier === 'undefined' ? 'undefined' : _typeof(eventModifier)) && 'function' !== typeof eventModifier) {
+    handleValidationError.call(this, 'Incorrect arguments provided to #extendEvent method');
+    return;
+  }
+  this.extensions.collections[eventCollection] = this.extensions.collections[eventCollection] || [];
+  this.extensions.collections[eventCollection].push(eventModifier);
+  this.emit('extendEvent', eventCollection, eventModifier);
+  return this;
+}
+
+function extendEvents(eventsModifier) {
+  if (arguments.length !== 1 || 'object' !== (typeof eventsModifier === 'undefined' ? 'undefined' : _typeof(eventsModifier)) && 'function' !== typeof eventsModifier) {
+    handleValidationError.call(this, 'Incorrect arguments provided to #extendEvents method');
+    return;
+  }
+  this.extensions.events.push(eventsModifier);
+  this.emit('extendEvents', eventsModifier);
+  return this;
+}
+
+function handleValidationError(message) {
+  var err = 'Event(s) not extended: ' + message;
+  this.emit('error', err);
+}
+
+function getExtendedEventBody(result, queue) {
+  if (queue && queue.length > 0) {
+    (0, _each2.default)(queue, function (eventModifier, i) {
+      var modifierResult = typeof eventModifier === 'function' ? eventModifier() : eventModifier;
+      (0, _deepExtend.deepExtend)(result, modifierResult);
     });
   }
-  env.Keen = KeenCore.extendLibrary(KeenCore);
-}).call(this, typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {});
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./browser-auto-tracking":2,"./defer-events":3,"./extend-events":4,"./helpers/getBrowserProfile":5,"./helpers/getDatetimeIndex":6,"./helpers/getDomNodePath":7,"./helpers/getDomNodeProfile":8,"./helpers/getScreenProfile":9,"./helpers/getScrollState":10,"./helpers/getUniqueId":11,"./helpers/getWindowProfile":12,"./index":13,"./record-events-browser":14,"./utils/cookie":16,"./utils/deepExtend":17,"./utils/each":18,"./utils/extend":19,"./utils/listener":20,"./utils/serializeForm":22,"./utils/timer":23}],2:[function(require,module,exports){
-var pkg = require('../package.json');
-function initAutoTracking(lib) {
-  return function(obj) {
+  return result;
+}
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.queue = queue;
+
+var _componentEmitter = __webpack_require__(2);
+
+var _componentEmitter2 = _interopRequireDefault(_componentEmitter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function queue() {
+  if (this instanceof queue === false) {
+    return new queue();
+  }
+  this.capacity = 0;
+  this.config = {
+    capacity: 5000,
+    interval: 15
+  };
+  this.events = {
+    // "collection-1": [],
+    // "collection-2": []
+  };
+  this.interval = 0;
+  this.timer = null;
+  return this;
+}
+
+(0, _componentEmitter2.default)(queue.prototype);
+
+queue.prototype.check = function () {
+  if (shouldFlushQueue(this)) {
+    this.flush();
+  }
+  if (this.config.interval === 0 || this.capacity === 0) {
+    this.pause();
+  }
+  return this;
+};
+
+queue.prototype.flush = function () {
+  this.emit('flush');
+  this.interval = 0;
+  return this;
+};
+
+queue.prototype.pause = function () {
+  if (this.timer) {
+    clearInterval(this.timer);
+    this.timer = null;
+  }
+  return this;
+};
+
+queue.prototype.start = function () {
+  var self = this;
+  self.pause();
+  self.timer = setInterval(function () {
+    self.interval++;
+    self.check();
+  }, 1000);
+  return self;
+};
+
+function shouldFlushQueue(props) {
+  if (props.capacity > 0 && props.interval >= props.config.interval) {
+    return true;
+  } else if (props.capacity >= props.config.capacity) {
+    return true;
+  }
+  return false;
+}
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.timer = timer;
+function timer(num) {
+  if (this instanceof timer === false) {
+    return new timer(num);
+  }
+  this.count = num || 0;
+  return this;
+}
+
+timer.prototype.start = function () {
+  var self = this;
+  this.pause();
+  this.interval = setInterval(function () {
+    self.count++;
+  }, 1000);
+  return this;
+};
+
+timer.prototype.pause = function () {
+  clearInterval(this.interval);
+  return this;
+};
+
+timer.prototype.value = function () {
+  return this.count;
+};
+
+timer.prototype.clear = function () {
+  this.count = 0;
+  return this;
+};
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.serializeForm = serializeForm;
+/*
+  This is a modified copy of https://github.com/defunctzombie/form-serialize/ v0.7.1
+  Includes a new configuration option:
+    * ignoreTypes - Array, Default: [], Example: [ 'password' ]
+*/
+
+// types which indicate a submit action and are not successful controls
+// these will be ignored
+var k_r_submitter = /^(?:submit|button|image|reset|file)$/i;
+
+// node names which could be successful controls
+var k_r_success_contrls = /^(?:input|select|textarea|keygen)/i;
+
+// Matches bracket notation.
+var brackets = /(\[[^\[\]]*\])/g;
+
+// serializes form fields
+// @param form MUST be an HTMLForm element
+// @param options is an optional argument to configure the serialization. Default output
+// with no options specified is a url encoded string
+//    - hash: [true | false] Configure the output type. If true, the output will
+//    be a js object.
+//    - serializer: [function] Optional serializer function to override the default one.
+//    The function takes 3 arguments (result, key, value) and should return new result
+//    hash and url encoded str serializers are provided with this module
+//    - disabled: [true | false]. If true serialize disabled fields.
+//    - empty: [true | false]. If true serialize empty fields
+function serializeForm(form, options) {
+  if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) != 'object') {
+    options = { hash: !!options };
+  } else if (options.hash === undefined) {
+    options.hash = true;
+  }
+
+  var result = options.hash ? {} : '';
+  var serializer = options.serializer || (options.hash ? hash_serializer : str_serialize);
+
+  var elements = form && form.elements ? form.elements : [];
+
+  // Object store each radio and set if it's empty or not
+  var radio_store = Object.create(null);
+
+  for (var i = 0; i < elements.length; ++i) {
+    var element = elements[i];
+
+    // NEW: Skip ignored field types
+    if (options.ignoreTypes && options.ignoreTypes.indexOf(element.type) > -1) {
+      continue;
+    }
+    // ingore disabled fields
+    if (!options.disabled && element.disabled || !element.name) {
+      continue;
+    }
+    // ignore anyhting that is not considered a success field
+    if (!k_r_success_contrls.test(element.nodeName) || k_r_submitter.test(element.type)) {
+      continue;
+    }
+
+    var key = element.name;
+    var val = element.value;
+
+    // we can't just use element.value for checkboxes cause some browsers lie to us
+    // they say "on" for value when the box isn't checked
+    if ((element.type === 'checkbox' || element.type === 'radio') && !element.checked) {
+      val = undefined;
+    }
+
+    // If we want empty elements
+    if (options.empty) {
+      if (element.type === 'checkbox' && !element.checked) {
+        val = '';
+      }
+
+      // for radio
+      if (element.type === 'radio') {
+        if (!radio_store[element.name] && !element.checked) {
+          radio_store[element.name] = false;
+        } else if (element.checked) {
+          radio_store[element.name] = true;
+        }
+      }
+
+      // if options empty is true, continue only if its radio
+      if (val == undefined && element.type == 'radio') {
+        continue;
+      }
+    } else {
+      // value-less fields are ignored unless options.empty is true
+      if (!val) {
+        continue;
+      }
+    }
+
+    // multi select boxes
+    if (element.type === 'select-multiple') {
+      val = [];
+
+      var selectOptions = element.options;
+      var isSelectedOptions = false;
+      for (var j = 0; j < selectOptions.length; ++j) {
+        var option = selectOptions[j];
+        var allowedEmpty = options.empty && !option.value;
+        var hasValue = option.value || allowedEmpty;
+        if (option.selected && hasValue) {
+          isSelectedOptions = true;
+
+          // If using a hash serializer be sure to add the
+          // correct notation for an array in the multi-select
+          // context. Here the name attribute on the select element
+          // might be missing the trailing bracket pair. Both names
+          // "foo" and "foo[]" should be arrays.
+          if (options.hash && key.slice(key.length - 2) !== '[]') {
+            result = serializer(result, key + '[]', option.value);
+          } else {
+            result = serializer(result, key, option.value);
+          }
+        }
+      }
+
+      if (!isSelectedOptions && options.empty) {
+        result = serializer(result, key, '');
+      }
+      continue;
+    }
+
+    result = serializer(result, key, val);
+  }
+
+  if (options.empty) {
+    for (var key in radio_store) {
+      if (!radio_store[key]) {
+        result = serializer(result, key, '');
+      }
+    }
+  }
+
+  return result;
+}
+
+function parse_keys(string) {
+  var keys = [];
+  var prefix = /^([^\[\]]*)/;
+  var children = new RegExp(brackets);
+  var match = prefix.exec(string);
+
+  if (match[1]) {
+    keys.push(match[1]);
+  }
+
+  while ((match = children.exec(string)) !== null) {
+    keys.push(match[1]);
+  }
+
+  return keys;
+}
+
+function hash_assign(result, keys, value) {
+  if (keys.length === 0) {
+    result = value;
+    return result;
+  }
+
+  var key = keys.shift();
+  var between = key.match(/^\[(.+?)\]$/);
+
+  if (key === '[]') {
+    result = result || [];
+
+    if (Array.isArray(result)) {
+      result.push(hash_assign(null, keys, value));
+    } else {
+      // This might be the result of bad name attributes like "[][foo]",
+      // in this case the original `result` object will already be
+      // assigned to an object literal. Rather than coerce the object to
+      // an array, or cause an exception the attribute "_values" is
+      // assigned as an array.
+      result._values = result._values || [];
+      result._values.push(hash_assign(null, keys, value));
+    }
+
+    return result;
+  }
+
+  // Key is an attribute name and can be assigned directly.
+  if (!between) {
+    result[key] = hash_assign(result[key], keys, value);
+  } else {
+    var string = between[1];
+    // +var converts the variable into a number
+    // better than parseInt because it doesn't truncate away trailing
+    // letters and actually fails if whole thing is not a number
+    var index = +string;
+
+    // If the characters between the brackets is not a number it is an
+    // attribute name and can be assigned directly.
+    if (isNaN(index)) {
+      result = result || {};
+      result[string] = hash_assign(result[string], keys, value);
+    } else {
+      result = result || [];
+      result[index] = hash_assign(result[index], keys, value);
+    }
+  }
+
+  return result;
+}
+
+// Object/hash encoding serializer.
+function hash_serializer(result, key, value) {
+  var matches = key.match(brackets);
+
+  // Has brackets? Use the recursive assignment function to walk the keys,
+  // construct any missing objects in the result tree and make the assignment
+  // at the end of the chain.
+  if (matches) {
+    var keys = parse_keys(key);
+    hash_assign(result, keys, value);
+  } else {
+    // Non bracket notation can make assignments directly.
+    var existing = result[key];
+
+    // If the value has been assigned already (for instance when a radio and
+    // a checkbox have the same name attribute) convert the previous value
+    // into an array before pushing into it.
+    //
+    // NOTE: If this requirement were removed all hash creation and
+    // assignment could go through `hash_assign`.
+    if (existing) {
+      if (!Array.isArray(existing)) {
+        result[key] = [existing];
+      }
+
+      result[key].push(value);
+    } else {
+      result[key] = value;
+    }
+  }
+
+  return result;
+}
+
+// urlform encoding serializer
+function str_serialize(result, key, value) {
+  // encode newlines as \r\n cause the html spec says so
+  value = value.replace(/(\r)?\n/g, '\r\n');
+  value = encodeURIComponent(value);
+
+  // spaces should be '+' rather than '%20'.
+  value = value.replace(/%20/g, '+');
+  return result + (result ? '&' : '') + encodeURIComponent(key) + '=' + value;
+}
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * JavaScript Cookie v2.1.0
+ * https://github.com/js-cookie/js-cookie
+ *
+ * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
+ * Released under the MIT license
+ */
+(function (factory) {
+	if (true) {
+		!(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else { var api, _OldCookies; }
+}(function () {
+	function extend () {
+		var i = 0;
+		var result = {};
+		for (; i < arguments.length; i++) {
+			var attributes = arguments[ i ];
+			for (var key in attributes) {
+				result[key] = attributes[key];
+			}
+		}
+		return result;
+	}
+
+	function init (converter) {
+		function api (key, value, attributes) {
+			var result;
+
+			// Write
+
+			if (arguments.length > 1) {
+				attributes = extend({
+					path: '/'
+				}, api.defaults, attributes);
+
+				if (typeof attributes.expires === 'number') {
+					var expires = new Date();
+					expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
+					attributes.expires = expires;
+				}
+
+				try {
+					result = JSON.stringify(value);
+					if (/^[\{\[]/.test(result)) {
+						value = result;
+					}
+				} catch (e) {}
+
+				if (!converter.write) {
+					value = encodeURIComponent(String(value))
+						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+				} else {
+					value = converter.write(value, key);
+				}
+
+				key = encodeURIComponent(String(key));
+				key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
+				key = key.replace(/[\(\)]/g, escape);
+
+				return (document.cookie = [
+					key, '=', value,
+					attributes.expires && '; expires=' + attributes.expires.toUTCString(), // use expires attribute, max-age is not supported by IE
+					attributes.path    && '; path=' + attributes.path,
+					attributes.domain  && '; domain=' + attributes.domain,
+					attributes.secure ? '; secure' : ''
+				].join(''));
+			}
+
+			// Read
+
+			if (!key) {
+				result = {};
+			}
+
+			// To prevent the for loop in the first place assign an empty array
+			// in case there are no cookies at all. Also prevents odd result when
+			// calling "get()"
+			var cookies = document.cookie ? document.cookie.split('; ') : [];
+			var rdecode = /(%[0-9A-Z]{2})+/g;
+			var i = 0;
+
+			for (; i < cookies.length; i++) {
+				var parts = cookies[i].split('=');
+				var name = parts[0].replace(rdecode, decodeURIComponent);
+				var cookie = parts.slice(1).join('=');
+
+				if (cookie.charAt(0) === '"') {
+					cookie = cookie.slice(1, -1);
+				}
+
+				try {
+					cookie = converter.read ?
+						converter.read(cookie, name) : converter(cookie, name) ||
+						cookie.replace(rdecode, decodeURIComponent);
+
+					if (this.json) {
+						try {
+							cookie = JSON.parse(cookie);
+						} catch (e) {}
+					}
+
+					if (key === name) {
+						result = cookie;
+						break;
+					}
+
+					if (!key) {
+						result[name] = cookie;
+					}
+				} catch (e) {}
+			}
+
+			return result;
+		}
+
+		api.get = api.set = api;
+		api.getJSON = function () {
+			return api.apply({
+				json: true
+			}, [].slice.call(arguments));
+		};
+		api.defaults = {};
+
+		api.remove = function (key, attributes) {
+			api(key, '', extend(attributes, {
+				expires: -1
+			}));
+		};
+
+		api.withConverter = init;
+
+		return api;
+	}
+
+	return init(function () {});
+}));
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.cookie = undefined;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _jsCookie = __webpack_require__(12);
+
+var _jsCookie2 = _interopRequireDefault(_jsCookie);
+
+var _extend = __webpack_require__(1);
+
+var _extend2 = _interopRequireDefault(_extend);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var cookie = exports.cookie = function cookie(str) {
+  if (!arguments.length) return;
+  if (this instanceof cookie === false) {
+    return new cookie(str);
+  }
+
+  this.config = {
+    key: str,
+    options: {
+      expires: 365
+    }
+  };
+  this.data = this.get();
+  return this;
+};
+
+cookie.prototype.get = function (str) {
+  var data = {};
+
+  if (_jsCookie2.default.get(this.config.key)) {
+    data = _jsCookie2.default.getJSON(this.config.key);
+  }
+  if (str && (typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object' && typeof data !== null) {
+    return typeof data[str] !== 'undefined' ? data[str] : null;
+  } else {
+    return data;
+  }
+};
+
+cookie.prototype.set = function (str, value, options) {
+  if (!arguments.length || !this.enabled()) return this;
+  if (typeof str === 'string' && arguments.length >= 2) {
+    this.data[str] = value ? value : null;
+  } else if ((typeof str === 'undefined' ? 'undefined' : _typeof(str)) === 'object' && arguments.length === 1) {
+    (0, _extend2.default)(this.data, str);
+  }
+  _jsCookie2.default.set(this.config.key, this.data, (0, _extend2.default)(this.config.options, options || {}));
+  return this;
+};
+
+cookie.prototype.expire = function (daysUntilExpire) {
+  if (daysUntilExpire) {
+    _jsCookie2.default.set(this.config.key, this.data, (0, _extend2.default)(this.config.options, { expires: daysUntilExpire }));
+  } else {
+    _jsCookie2.default.remove(this.config.key);
+    this.data = {};
+  }
+  return this;
+};
+
+cookie.prototype.options = function (obj) {
+  if (!arguments.length) return this.config.options;
+  this.config.options = (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' ? obj : {};
+  return this;
+};
+
+cookie.prototype.enabled = function () {
+  return navigator.cookieEnabled;
+};
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getUniqueId = getUniqueId;
+// via: http://stackoverflow.com/a/2117523/2511985
+
+function getUniqueId() {
+  var str = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+  return str.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0,
+        v = c == 'x' ? r : r & 0x3 | 0x8;
+    return v.toString(16);
+  });
+}
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.getScrollState = getScrollState;
+
+var _extend = __webpack_require__(1);
+
+var _extend2 = _interopRequireDefault(_extend);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getScrollState(obj) {
+  var config = (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' ? obj : {};
+  var state = (0, _extend2.default)({
+    pixel: 0,
+    pixel_max: 0,
+    ratio: null,
+    ratio_max: null
+  }, config);
+
+  if ((typeof window === 'undefined' ? 'undefined' : _typeof(window)) !== undefined || (typeof document === 'undefined' ? 'undefined' : _typeof(document)) !== undefined) {
+    state.pixel = getScrollOffset() + getWindowHeight();
+    if (state.pixel > state.pixel_max) {
+      state.pixel_max = state.pixel;
+    }
+    state.ratio = parseFloat(Number(state.pixel / getScrollableArea()).toFixed(2));
+    state.ratio_max = parseFloat(Number(state.pixel_max / getScrollableArea()).toFixed(2));
+  }
+
+  return state;
+}
+
+function getScrollableArea() {
+  var body = document.body;
+  var html = document.documentElement;
+  return Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight) || null;
+}
+
+function getScrollOffset() {
+  return window.pageYOffset !== undefined ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+}
+
+function getWindowHeight() {
+  return window.innerHeight || document.documentElement.clientHeight;
+}
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getDomNodeProfile = getDomNodeProfile;
+
+var _getDomNodePath = __webpack_require__(4);
+
+function getDomNodeProfile(el) {
+  return {
+    action: el.action,
+    class: el.className,
+    href: el.href || null,
+    id: el.id,
+    method: el.method,
+    name: el.name,
+    ng_click: el.getAttribute('ng-click'),
+    ng_model: el.getAttribute('ng-model'),
+    node_name: el.nodeName,
+    selector: (0, _getDomNodePath.getDomNodePath)(el),
+    text: el.text,
+    title: el.title,
+    type: el.type,
+    x_position: el.offsetLeft || el.clientLeft || null,
+    y_position: el.offsetTop || el.clientTop || null
+  };
+}
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getDomainName = getDomainName;
+function extractHostname(url) {
+    var hostname;
+    //find & remove protocol (http, ftp, etc.) and get hostname
+
+    if (url.indexOf("://") > -1) {
+        hostname = url.split('/')[2];
+    } else {
+        hostname = url.split('/')[0];
+    }
+
+    //find & remove port number
+    hostname = hostname.split(':')[0];
+    //find & remove "?"
+    hostname = hostname.split('?')[0];
+
+    return hostname;
+}
+
+// To address those who want the "root domain," use this function:
+function getDomainName(url) {
+    var domain = extractHostname(url),
+        splitArr = domain.split('.'),
+        arrLen = splitArr.length;
+
+    //extracting the root domain here
+    //if there is a subdomain
+    if (arrLen > 2) {
+        domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
+        //check to see if it's using a Country Code Top Level Domain (ccTLD) (i.e. ".me.uk")
+        if (splitArr[arrLen - 2].length == 2 && splitArr[arrLen - 1].length == 2) {
+            //this is using a ccTLD
+            domain = splitArr[arrLen - 3] + '.' + domain;
+        }
+    }
+    return domain;
+}
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getDatetimeIndex = getDatetimeIndex;
+function getDatetimeIndex(input) {
+  var date = input || new Date();
+  return {
+    'hour_of_day': date.getHours(),
+    'day_of_week': parseInt(1 + date.getDay()),
+    'day_of_month': date.getDate(),
+    'month': parseInt(1 + date.getMonth()),
+    'year': date.getFullYear()
+  };
+}
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getBrowserProfile = getBrowserProfile;
+
+var _getScreenProfile = __webpack_require__(6);
+
+var _getWindowProfile = __webpack_require__(5);
+
+function getBrowserProfile() {
+  return {
+    'cookies': 'undefined' !== typeof navigator.cookieEnabled ? navigator.cookieEnabled : false,
+    'codeName': navigator.appCodeName,
+    'description': getDocumentDescription(),
+    'language': navigator.language,
+    'name': navigator.appName,
+    'online': navigator.onLine,
+    'platform': navigator.platform,
+    'useragent': navigator.userAgent,
+    'version': navigator.appVersion,
+    'screen': (0, _getScreenProfile.getScreenProfile)(),
+    'window': (0, _getWindowProfile.getWindowProfile)()
+  };
+}
+
+function getDocumentDescription() {
+  var el;
+  if (document && typeof document.querySelector === 'function') {
+    el = document.querySelector('meta[name="description"]');
+  }
+  return el ? el.content : '';
+}
+
+/***/ }),
+/* 20 */
+/***/ (function(module) {
+
+module.exports = {"name":"keen-tracking","version":"2.0.1","description":"Data Collection SDK for Keen IO","main":"dist/node/keen-tracking.js","browser":"dist/keen-tracking.js","repository":{"type":"git","url":"https://github.com/keen/keen-tracking.js.git"},"scripts":{"start":"NODE_ENV=development webpack-dev-server","test":"NODE_ENV=test jest && NODE_ENV=test TEST_ENV=node jest","test:watch":"NODE_ENV=test jest --watch","test:node:watch":"NODE_ENV=test TEST_ENV=node jest --watch","test:regression":"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve'","regressiontest":"npm run test:regression","build":"NODE_ENV=production webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 webpack -p && npm run build:node","build:node":"TARGET=node NODE_ENV=production webpack -p","profile":"webpack --profile --json > stats.json","analyze":"webpack-bundle-analyzer stats.json /dist","preversion":"npm run build && npm run test","version":"git add .","postversion":"git push && git push --tags","demo":"node ./test/demo/index.node.js"},"bugs":"https://github.com/keen/keen-tracking.js/issues","author":"Keen IO <team@keen.io> (https://keen.io/)","contributors":["Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)","Eric Anderson <eric@keen.io> (https://github.com/aroc)","Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)","Alex Kleissner <alex@keen.io> (https://github.com/hex337)","Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)"],"license":"MIT","dependencies":{"component-emitter":"^1.2.0","js-cookie":"2.1.0","keen-core":"^0.1.3"},"devDependencies":{"babel-loader":"^7.1.4","babel-plugin-transform-es2015-modules-commonjs":"^6.26.2","babel-plugin-transform-object-rest-spread":"^6.26.0","babel-preset-env":"^1.7.0","eslint":"^4.19.1","eslint-config-airbnb":"^16.1.0","eslint-loader":"^2.0.0","eslint-plugin-import":"^2.11.0","eslint-plugin-jsx-a11y":"^6.0.3","gulp":"^3.8.11","gulp-awspublish":"0.0.23","gulp-connect":"^5.5.0","gulp-rename":"^1.2.2","gulp-replace":"^0.5.3","html-loader":"^0.5.5","html-webpack-plugin":"^3.2.0","jest":"^22.4.3","nock":"^9.2.6","regenerator-runtime":"^0.11.1","testcafe":"^0.20.3","testcafe-browser-provider-browserstack":"^1.3.0","testcafe-browser-provider-puppeteer":"^1.3.0","testcafe-browser-provider-saucelabs":"^1.3.0","webpack":"^4.5.0","webpack-bundle-analyzer":"^2.11.1","webpack-cli":"^2.0.13","webpack-dev-server":"^3.1.1","xhr-mock":"^2.3.2"}};
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.initAutoTrackingCore = initAutoTrackingCore;
+
+var _package = __webpack_require__(20);
+
+var _package2 = _interopRequireDefault(_package);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function initAutoTrackingCore(lib) {
+  return function (obj) {
     var client = this;
     var helpers = lib.helpers;
     var utils = lib.utils;
+
     var options = utils.extend({
       ignoreDisabledFormFields: false,
       ignoreFormFieldTypes: ['password'],
@@ -135,32 +1457,43 @@ function initAutoTracking(lib) {
       recordInputChanges: false,
       recordPageUnloads: false,
       recordPageViews: true,
-      recordScrollState: true
+      recordScrollState: true,
+      shareUuidAcrossDomains: false
     }, obj);
+
     var now = new Date();
+
     var cookie = new utils.cookie('keen');
     var uuid = cookie.get('uuid');
     if (!uuid) {
       uuid = helpers.getUniqueId();
-      cookie.set('uuid', uuid);
+      var domainName = helpers.getDomainName(window.location.hostname);
+      var cookieDomain = domainName && options.shareUuidAcrossDomains ? {
+        domain: '.' + domainName
+      } : {};
+      cookie.set('uuid', uuid, cookieDomain);
     }
+
     var session_cookie = new utils.cookie('prodperfect_session');
     var session_uuid = session_cookie.get('session_uuid');
     if (!session_uuid) {
       session_uuid = helpers.getUniqueId();
     }
     session_cookie.set('session_uuid', session_uuid);
-    session_cookie.expire(1/48);
+    session_cookie.expire(1 / 48);
+
     var scrollState = {};
     if (options.recordScrollState) {
       scrollState = helpers.getScrollState();
-      utils.listener('window').on('scroll', function(){
+      utils.listener('window').on('scroll', function () {
         scrollState = helpers.getScrollState(scrollState);
       });
     }
+
     var tracker_loaded_at_time = now.toISOString();
     var tracker_load_uuid_value = helpers.getUniqueId();
-    client.extendEvents(function() {
+
+    client.extendEvents(function () {
       var browserProfile = helpers.getBrowserProfile();
       return {
         iso_time_full: new Date().toISOString(),
@@ -168,7 +1501,7 @@ function initAutoTracking(lib) {
         session: {
           session_uuid: session_uuid
         },
-        tracked_by: pkg.name + '-' + pkg.version,
+        tracked_by: _package2.default.name + '-' + _package2.default.version,
         tracker_load_uuid: tracker_load_uuid_value,
         tracker_loaded_at: tracker_loaded_at_time,
         user: {
@@ -179,76 +1512,76 @@ function initAutoTracking(lib) {
           description: browserProfile.description,
           time_on_page: getSecondsSinceDate(now)
         },
+
         ip_address: '${keen.ip}',
-        geo: { /* Enriched */ },
+        geo: {/* Enriched */},
+
         user_agent: '${keen.user_agent}',
         tech: {
           profile: browserProfile
           /* Enriched */
         },
+
         url: {
           full: window ? window.location.href : '',
-          info: { /* Enriched */ }
+          info: {/* Enriched */}
         },
+
         referrer: {
           full: document ? document.referrer : '',
-          info: { /* Enriched */ }
+          info: {/* Enriched */}
         },
+
         time: {
-          local: { /* Enriched */ },
-          utc: { /* Enriched */ }
+          local: {/* Enriched */},
+          utc: {/* Enriched */}
         },
+
         keen: {
           timestamp: new Date().toISOString(),
-          addons: [
-            {
-              name: 'keen:ip_to_geo',
-              input: {
-                ip: 'ip_address'
-              },
-              output : 'geo'
+          addons: [{
+            name: 'keen:ip_to_geo',
+            input: {
+              ip: 'ip_address'
             },
-            {
-              name: 'keen:ua_parser',
-              input: {
-                ua_string: 'user_agent'
-              },
-              output: 'tech'
+            output: 'geo'
+          }, {
+            name: 'keen:ua_parser',
+            input: {
+              ua_string: 'user_agent'
             },
-            {
-              name: 'keen:url_parser',
-              input: {
-                url: 'url.full'
-              },
-              output: 'url.info'
+            output: 'tech'
+          }, {
+            name: 'keen:url_parser',
+            input: {
+              url: 'url.full'
             },
-            {
-              name: 'keen:url_parser',
-              input: {
-                url: 'referrer.full'
-              },
-              output: 'referrer.info'
+            output: 'url.info'
+          }, {
+            name: 'keen:url_parser',
+            input: {
+              url: 'referrer.full'
             },
-            {
-              name: 'keen:date_time_parser',
-              input: {
-                date_time: 'keen.timestamp'
-              },
-              output: 'time.utc'
+            output: 'referrer.info'
+          }, {
+            name: 'keen:date_time_parser',
+            input: {
+              date_time: 'keen.timestamp'
             },
-            {
-              name: 'keen:date_time_parser',
-              input: {
-                date_time: 'iso_time_full'
-              },
-              output: 'time.local'
-            }
-          ],
+            output: 'time.utc'
+          }, {
+            name: 'keen:date_time_parser',
+            input: {
+              date_time: 'iso_time_full'
+            },
+            output: 'time.local'
+          }]
         }
       };
     });
+
     if (options.recordClicks === true) {
-      utils.listener('*').on('click', function(e) {
+      utils.listener('*').on('click', function (e) {
         var el = e.target;
         var props = {
           element: helpers.getDomNodeProfile(el),
@@ -259,8 +1592,9 @@ function initAutoTracking(lib) {
         client.recordEvent('clicks', props);
       });
     }
+
     if (options.recordFormSubmits === true) {
-      utils.listener('form').on('submit', function(e) {
+      utils.listener('form').on('submit', function (e) {
         var el = e.target;
         var serializerOptions = {
           disabled: options.ignoreDisabledFormFields,
@@ -285,6 +1619,7 @@ function initAutoTracking(lib) {
         client.recordEvent('form_submissions', props);
       });
     }
+
     if (options.recordInputChanges === true) {
       utils.listener('*').on('change', function (e) {
         var el = e.target;
@@ -297,39 +1632,65 @@ function initAutoTracking(lib) {
         client.recordEvent('changes', props);
       });
     }
+
     if (options.recordPageUnloads === true && window.addEventListener) {
       window.addEventListener('beforeunload', function (e) {
         client.recordEvent('pageunloads');
       }, false);
     }
+
     if (options.recordPageViews === true) {
       client.recordEvent('pageviews');
     }
+
     return client;
   };
 }
+
 function getSecondsSinceDate(date) {
   var diff = new Date().getTime() - date.getTime();
   return Math.round(diff / 1000);
 }
-module.exports = initAutoTracking;
-},{"../package.json":32}],3:[function(require,module,exports){
-var Keen = require('./index');
-var each = require('./utils/each');
-var queue = require('./utils/queue');
-module.exports = {
-  'deferEvent': deferEvent,
-  'deferEvents': deferEvents,
-  'queueCapacity': queueCapacity,
-  'queueInterval': queueInterval,
-  'recordDeferredEvents': recordDeferredEvents,
-  'unloadDeferredEvents': unloadDeferredEvents
-};
-function deferEvent(eventCollection, eventBody){
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.deferEvent = deferEvent;
+exports.deferEvents = deferEvents;
+exports.queueCapacity = queueCapacity;
+exports.queueInterval = queueInterval;
+exports.recordDeferredEvents = recordDeferredEvents;
+exports.unloadDeferredEvents = unloadDeferredEvents;
+
+var _index = __webpack_require__(3);
+
+var _index2 = _interopRequireDefault(_index);
+
+var _each = __webpack_require__(0);
+
+var _each2 = _interopRequireDefault(_each);
+
+var _queue = __webpack_require__(9);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function deferEvent(eventCollection, eventBody) {
+
   if (arguments.length !== 2 || typeof eventCollection !== 'string') {
     handleValidationError.call(this, 'Incorrect arguments provided to #deferEvent method');
     return;
   }
+
   this.queue.events[eventCollection] = this.queue.events[eventCollection] || [];
   this.queue.events[eventCollection].push(eventBody);
   this.queue.capacity++;
@@ -339,13 +1700,16 @@ function deferEvent(eventCollection, eventBody){
   this.emit('deferEvent', eventCollection, eventBody);
   return this;
 }
-function deferEvents(eventsHash){
+
+function deferEvents(eventsHash) {
   var self = this;
-  if (arguments.length !== 1 || typeof eventsHash !== 'object') {
+
+  if (arguments.length !== 1 || (typeof eventsHash === 'undefined' ? 'undefined' : _typeof(eventsHash)) !== 'object') {
     handleValidationError.call(this, 'Incorrect arguments provided to #deferEvents method');
     return;
   }
-  each(eventsHash, function(eventList, eventCollection){
+
+  (0, _each2.default)(eventsHash, function (eventList, eventCollection) {
     self.queue.events[eventCollection] = self.queue.events[eventCollection] || [];
     self.queue.events[eventCollection] = self.queue.events[eventCollection].concat(eventList);
     self.queue.capacity = self.queue.capacity + eventList.length;
@@ -356,1430 +1720,64 @@ function deferEvents(eventsHash){
   self.emit('deferEvents', eventsHash);
   return self;
 }
-function queueCapacity(num){
+
+function queueCapacity(num) {
   if (!arguments.length) return this.queue.config.capacity;
-  this.queue.config.capacity = num ? Number(num): 0;
+  this.queue.config.capacity = num ? Number(num) : 0;
   this.queue.check();
   return this;
 }
-function queueInterval(num){
+
+function queueInterval(num) {
   if (!arguments.length) return this.queue.config.interval;
-  this.queue.config.interval = num ? Number(num): 0;
+  this.queue.config.interval = num ? Number(num) : 0;
   this.queue.check();
   return this;
 }
-function recordDeferredEvents(){
+
+function recordDeferredEvents() {
   var self = this,
       clonedQueueConfig,
       clonedQueueEvents;
+
   if (self.queue.capacity > 0) {
     self.queue.pause();
     clonedQueueConfig = JSON.parse(JSON.stringify(self.queue.config));
     clonedQueueEvents = JSON.parse(JSON.stringify(self.queue.events));
-    self.queue = queue();
+    self.queue = (0, _queue.queue)();
     self.queue.config = clonedQueueConfig;
     self.queue.on('flush', function () {
       self.recordDeferredEvents();
     });
     self.emit('recordDeferredEvents', clonedQueueEvents);
-    self.recordEvents(clonedQueueEvents, function(err, res){
+    self.recordEvents(clonedQueueEvents, function (err, res) {
       if (err) {
+        // Retry once
         self.recordEvents(clonedQueueEvents);
-      }
-      else {
+      } else {
         clonedQueueEvents = undefined;
       }
     });
   }
   return self;
 }
-function unloadDeferredEvents(){
-    self.queue.pause();
-    each(self.queue.events, function (events, collection) {
-      self.recordEvent(collection, events);
-    });
+
+function unloadDeferredEvents() {
+  self.queue.pause();
+  (0, _each2.default)(self.queue.events, function (events, collection) {
+    self.recordEvent(collection, events);
+  });
 }
-function handleValidationError(message){
+
+function handleValidationError(message) {
   var err = 'Event(s) not deferred: ' + message;
   this.emit('error', err);
 }
-},{"./index":13,"./utils/each":18,"./utils/queue":21}],4:[function(require,module,exports){
-var deepExtend = require('./utils/deepExtend');
-var each = require('./utils/each');
-module.exports = {
-  'extendEvent': extendEvent,
-  'extendEvents': extendEvents,
-  'getExtendedEventBody': getExtendedEventBody
-};
-function extendEvent(eventCollection, eventModifier){
-  if (arguments.length !== 2 || typeof eventCollection !== 'string'
-    || ('object' !== typeof eventModifier && 'function' !== typeof eventModifier)) {
-      handleValidationError.call(this, 'Incorrect arguments provided to #extendEvent method');
-      return;
-  }
-  this.extensions.collections[eventCollection] = this.extensions.collections[eventCollection] || [];
-  this.extensions.collections[eventCollection].push(eventModifier);
-  this.emit('extendEvent', eventCollection, eventModifier);
-  return this;
-}
-function extendEvents(eventsModifier){
-  if (arguments.length !== 1 || ('object' !== typeof eventsModifier && 'function' !== typeof eventsModifier)) {
-    handleValidationError.call(this, 'Incorrect arguments provided to #extendEvents method');
-    return;
-  }
-  this.extensions.events.push(eventsModifier);
-  this.emit('extendEvents', eventsModifier);
-  return this;
-}
-function handleValidationError(message){
-  var err = 'Event(s) not extended: ' + message;
-  this.emit('error', err);
-}
-function getExtendedEventBody(result, queue){
-  if (queue && queue.length > 0) {
-    each(queue, function(eventModifier, i){
-      var modifierResult = (typeof eventModifier === 'function') ? eventModifier() : eventModifier;
-      deepExtend(result, modifierResult);
-    });
-  }
-  return result;
-}
-},{"./utils/deepExtend":17,"./utils/each":18}],5:[function(require,module,exports){
-var getScreenProfile = require('./getScreenProfile'),
-    getWindowProfile = require('./getWindowProfile');
-function getBrowserProfile() {
-  return {
-    'cookies'    : ('undefined' !== typeof navigator.cookieEnabled) ? navigator.cookieEnabled : false,
-    'codeName'   : navigator.appCodeName,
-    'description': getDocumentDescription(),
-    'language'   : navigator.language,
-    'name'       : navigator.appName,
-    'online'     : navigator.onLine,
-    'platform'   : navigator.platform,
-    'useragent'  : navigator.userAgent,
-    'version'    : navigator.appVersion,
-    'screen'     : getScreenProfile(),
-    'window'     : getWindowProfile()
-  }
-}
-function getDocumentDescription() {
-  var el;
-  if (document && typeof document.querySelector === 'function') {
-    el = document.querySelector('meta[name="description"]');
-  }
-  return el ? el.content : '';
-}
-module.exports = getBrowserProfile;
-},{"./getScreenProfile":9,"./getWindowProfile":12}],6:[function(require,module,exports){
-function getDateTimeIndex(input){
-  var date = input || new Date();
-  return {
-    'hour_of_day'  : date.getHours(),
-    'day_of_week'  : parseInt( 1 + date.getDay() ),
-    'day_of_month' : date.getDate(),
-    'month'        : parseInt( 1 + date.getMonth() ),
-    'year'         : date.getFullYear()
-  };
-}
-module.exports = getDateTimeIndex;
-},{}],7:[function(require,module,exports){
-function getDomNodePath(el){
-  if (!el.nodeName) return '';
-  var stack = [];
-  while ( el.parentNode != null ) {
-    var sibCount = 0;
-    var sibIndex = 0;
-    for ( var i = 0; i < el.parentNode.childNodes.length; i++ ) {
-      var sib = el.parentNode.childNodes[i];
-      if ( sib.nodeName == el.nodeName ) {
-        if ( sib === el ) {
-          sibIndex = sibCount;
-        }
-        sibCount++;
-      }
-    }
-    if ( el.hasAttribute('id') && el.id != '' ) {
-      stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
-    } else if ( sibCount > 1 ) {
-      stack.unshift(el.nodeName.toLowerCase() + ':eq(' + sibIndex + ')');
-    } else {
-      stack.unshift(el.nodeName.toLowerCase());
-    }
-    el = el.parentNode;
-  }
-  return stack.slice(1).join(' > ');
-}
-module.exports = getDomNodePath;
-},{}],8:[function(require,module,exports){
-var getDomNodePath = require('./getDomNodePath');
-function getDomNodeProfile(el) {
-  return {
-    action: el.action,
-    class: el.className,
-    href: el.href,
-    id: el.id,
-    method: el.method,
-    name: el.name,
-    ng_click: el.getAttribute('ng-click'),
-    ng_model: el.getAttribute('ng-model'),
-    node_name: el.nodeName,
-    selector: getDomNodePath(el),
-    text: el.text,
-    title: el.title,
-    type: el.type,
-    x_position: el.offsetLeft || el.clientLeft || null,
-    y_position: el.offsetTop || el.clientTop || null
-  };
-}
-module.exports = getDomNodeProfile;
-},{"./getDomNodePath":7}],9:[function(require,module,exports){
-function getScreenProfile(){
-  var keys, output;
-  if ('undefined' == typeof window || !window.screen) return {};
-  keys = ['height', 'width', 'colorDepth', 'pixelDepth', 'availHeight', 'availWidth'];
-  output = {};
-  for (var i = 0; i < keys.length; i++) {
-    output[keys[i]] = window.screen[keys[i]] ? window.screen[keys[i]] : null;
-  }
-  output.orientation = {
-    'angle' : window.screen.orientation ? window.screen.orientation['angle'] : 0,
-    'type'  : window.innerWidth > window.innerHeight ? 'landscape': 'portrait'
-  };
-  return output;
-}
-module.exports = getScreenProfile;
-},{}],10:[function(require,module,exports){
-var extend = require('../utils/extend');
-function getScrollState(obj){
-  var config = typeof obj === 'object' ? obj : {};
-  var state = extend({
-    pixel: 0,
-    pixel_max: 0,
-    ratio: null,
-    ratio_max: null
-  }, config);
-  if (typeof window !== undefined || typeof document !== undefined) {
-    state.pixel = getScrollOffset() + getWindowHeight();
-    if (state.pixel > state.pixel_max) {
-      state.pixel_max = state.pixel;
-    }
-    state.ratio = parseFloat(Number(state.pixel / getScrollableArea()).toFixed(2));
-    state.ratio_max = parseFloat(Number(state.pixel_max / getScrollableArea()).toFixed(2));
-  }
-  return state;
-}
-function getScrollableArea() {
-  var body = document.body;
-  var html = document.documentElement;
-  return Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight ) || null;
-}
-function getScrollOffset() {
-  return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
-}
-function getWindowHeight() {
-  return window.innerHeight || document.documentElement.clientHeight;
-}
-module.exports = getScrollState;
-},{"../utils/extend":19}],11:[function(require,module,exports){
-function getUniqueId(){
-  var str = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
-  return str.replace(/[xy]/g, function(c) {
-    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-    return v.toString(16);
-  });
-}
-module.exports = getUniqueId;
-},{}],12:[function(require,module,exports){
-function getWindowProfile(){
-  var body, html, output;
-  if ('undefined' == typeof document) return {};
-  body = document.body;
-  html = document.documentElement;
-  output = {
-    'height': ('innerHeight' in window) ? window.innerHeight : document.documentElement.offsetHeight,
-    'width': ('innerWidth' in window) ? window.innerWidth : document.documentElement.offsetWidth,
-    'scrollHeight': Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight ) || null
-  };
-  if (window.screen) {
-    output.ratio = {
-      'height': (window.screen.availHeight) ? parseFloat( (window.innerHeight/window.screen.availHeight).toFixed(2) ) : null,
-      'width': (window.screen.availWidth) ? parseFloat( (window.innerWidth/window.screen.availWidth).toFixed(2) ) : null
-    };
-  }
-  return output;
-}
-module.exports = getWindowProfile;
-/*
-  Notes:
-    document.documentElement.offsetHeight/Width is a workaround for IE8 and below, where window.innerHeight/Width is undefined
-*/
-},{}],13:[function(require,module,exports){
-var KeenCore = require('keen-core');
-var each = require('./utils/each'),
-    extend = require('./utils/extend'),
-    queue = require('./utils/queue');
-KeenCore.helpers = KeenCore.helpers || {};
-KeenCore.on('client', function(client){
-  client.extensions = {
-    events: [],
-    collections: {}
-  };
-  client.queue = queue();
-  client.queue.on('flush', function(){
-    client.recordDeferredEvents();
-  });
-});
-KeenCore.prototype.writeKey = function(str){
-  if (!arguments.length) return this.config.writeKey;
-  this.config.writeKey = (str ? String(str) : null);
-  return this;
-};
-KeenCore.prototype.setGlobalProperties = function(props){
-  KeenCore.log('This method has been deprecated. Check out #extendEvents: https://github.com/keen/keen-tracking.js#extend-events');
-  if (!props || typeof props !== 'function') {
-    this.emit('error', 'Invalid value for global properties: ' + props);
-    return;
-  }
-  this.config.globalProperties = props;
-  return this;
-};
-module.exports = KeenCore;
-},{"./utils/each":18,"./utils/extend":19,"./utils/queue":21,"keen-core":26}],14:[function(require,module,exports){
-var Keen = require('./index');
-var base64 = require('./utils/base64');
-var each = require('./utils/each');
-var extend = require('./utils/extend');
-var extendEvents = require('./extend-events');
-module.exports = {
-  'recordEvent': recordEvent,
-  'recordEvents': recordEvents,
-  'addEvent': addEvent,
-  'addEvents': addEvents
-};
-function recordEvent(eventCollection, eventBody, callback, async){
-  var url, data, cb, getRequestUrl, getRequestUrlOkLength, extendedEventBody, isAsync;
-  url = this.url('events', encodeURIComponent(eventCollection));
-  data = {};
-  cb = callback;
-  isAsync = ('boolean' === typeof async) ? async : true;
-  if (!checkValidation.call(this, cb)) {
-    return;
-  }
-  if (!eventCollection || typeof eventCollection !== 'string') {
-    handleValidationError.call(this, 'Collection name must be a string.', cb);
-    return;
-  }
-  if (this.config.globalProperties) {
-    data = this.config.globalProperties(eventCollection);
-  }
-  extend(data, eventBody);
-  extendedEventBody = {};
-  extendEvents.getExtendedEventBody(extendedEventBody, this.extensions.events);
-  extendEvents.getExtendedEventBody(extendedEventBody, this.extensions.collections[eventCollection]);
-  extendEvents.getExtendedEventBody(extendedEventBody, [data]);
-  this.emit('recordEvent', eventCollection, extendedEventBody);
-  if (!Keen.enabled) {
-    handleValidationError.call(this, 'Keen.enabled is set to false.', cb);
-    return false;
-  }
-  getRequestUrl = this.url('events', encodeURIComponent(eventCollection), {
-    api_key  : this.writeKey(),
-    data     : encodeURIComponent( base64.encode( JSON.stringify(extendedEventBody) ) ),
-    modified : new Date().getTime()
-  });
-  getRequestUrlOkLength = getRequestUrl.length < getUrlMaxLength();
-  if (isAsync) {
-    switch (this.config.requestType) {
-      case 'xhr':
-        sendXhr.call(this, 'POST', url, extendedEventBody, cb);
-        break;
-      case 'beacon':
-        if (navigator.sendBeacon) {
-          var beacon_url = this.url('events', encodeURIComponent(eventCollection),{ api_key: this.writeKey()});
-          navigator.sendBeacon(beacon_url, JSON.stringify(extendedEventBody));
-        }
-        else if (getRequestUrlOkLength) {
-            sendBeacon.call(this, getRequestUrl, cb);
-        }
-        else {
-          attemptPostXhr.call(this, url, extendedEventBody,
-              'Beacon URL length exceeds current browser limit, and XHR is not supported.', cb)
-        }
-        break;
-      default:
-        if (getRequestUrlOkLength) {
-          sendJSONp.call(this, getRequestUrl, cb);
-        }
-        else {
-          attemptPostXhr.call(this, url, extendedEventBody,
-              'JSONp URL length exceeds current browser limit, and XHR is not supported.', cb)
-        }
-        break;
-    }
-  }
-  else {
-    if (getRequestUrlOkLength) {
-      sendSynchronousXhr(getRequestUrl);
-    }
-  }
-  callback = cb = null;
-  return this;
-}
-function recordEvents(eventsHash, callback){
-  var self = this, url, cb, extendedEventsHash;
-  url = this.url('events');
-  cb = callback;
-  callback = null;
-  if (!checkValidation.call(this, cb)) {
-    return;
-  }
-  if ('object' !== typeof eventsHash || eventsHash instanceof Array) {
-    handleValidationError.call(this, 'First argument must be an object', cb);
-    return;
-  }
-  if (arguments.length > 2) {
-    handleValidationError.call(this, 'Incorrect arguments provided to #recordEvents method', cb);
-    return;
-  }
-  if (this.config.globalProperties) {
-    each(eventsHash, function(events, collection){
-      each(events, function(body, index){
-        var modified = self.config.globalProperties(collection);
-        eventsHash[collection][index] = extend(modified, body);
-      });
-    });
-  }
-  extendedEventsHash = {};
-  each(eventsHash, function(eventList, eventCollection){
-    extendedEventsHash[eventCollection] = extendedEventsHash[eventCollection] || [];
-    each(eventList, function(eventBody, index){
-      var extendedEventBody = {};
-      extendEvents.getExtendedEventBody(extendedEventBody, self.extensions.events);
-      extendEvents.getExtendedEventBody(extendedEventBody, self.extensions.collections[eventCollection]);
-      extendEvents.getExtendedEventBody(extendedEventBody, [eventBody]);
-      extendedEventsHash[eventCollection].push(extendedEventBody);
-    });
-  });
-  this.emit('recordEvents', extendedEventsHash);
-  if (!Keen.enabled) {
-    handleValidationError.call(this, 'Keen.enabled is set to false.', cb);
-    return false;
-  }
-  if (getXhr()) {
-    sendXhr.call(this, 'POST', url, extendedEventsHash, cb);
-  }
-  else {
-  }
-  callback = cb = null;
-  return this;
-}
-function addEvent(){
-  this.emit('error', 'This method has been deprecated. Check out #recordEvent: https://github.com/keen/keen-tracking.js#record-a-single-event');
-  recordEvent.apply(this, arguments);
-}
-function addEvents(){
-  this.emit('error', 'This method has been deprecated. Check out #recordEvents: https://github.com/keen/keen-tracking.js#record-multiple-events');
-  recordEvents.apply(this, arguments);
-}
-function checkValidation(callback){
-  var cb = callback;
-  callback = null;
-  if (!this.projectId()) {
-    handleValidationError.call(this, 'Keen.Client is missing a projectId property.', cb);
-    return false;
-  }
-  if (!this.writeKey()) {
-    handleValidationError.call(this, 'Keen.Client is missing a writeKey property.', cb);
-    return false;
-  }
-  return true;
-}
-function handleValidationError(message, cb){
-  var err = 'Event(s) not recorded: ' + message;
-  this.emit('error', err);
-  if (cb) {
-    cb.call(this, err, null);
-    cb = null;
-  }
-}
-function getUrlMaxLength(){
-  if ('undefined' !== typeof window && navigator) {
-    if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
-      return 2000;
-    }
-  }
-  return 16000;
-}
-function attemptPostXhr(url, data, noXhrError, callback) {
-  if (getXhr()) {
-    sendXhr.call(this, 'POST', url, data, callback);
-  }
-  else {
-    handleValidationError.call(this, noXhrError);
-  }
-}
-function sendXhr(method, url, data, callback){
-  var self = this;
-  var payload;
-  var xhr = getXhr();
-  var cb = callback;
-  callback = null;
-  xhr.onreadystatechange = function() {
-    var response;
-    if (xhr.readyState == 4) {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try {
-          response = JSON.parse( xhr.responseText );
-        } catch (e) {
-          Keen.emit('error', 'Could not parse HTTP response: ' + xhr.responseText);
-          if (cb) {
-            cb.call(self, xhr, null);
-          }
-        }
-        if (cb && response) {
-          cb.call(self, null, response);
-        }
-      }
-      else {
-        Keen.emit('error', 'HTTP request failed.');
-        if (cb) {
-          cb.call(self, xhr, null);
-        }
-      }
-    }
-  };
-  xhr.open(method, url, true);
-  xhr.setRequestHeader('Authorization', self.writeKey());
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  if (data) {
-    payload = JSON.stringify(data);
-  }
-  if (method.toUpperCase() === 'GET') {
-    xhr.send();
-  }
-  if (method.toUpperCase() === 'POST') {
-    xhr.send(payload);
-  }
-}
-function sendSynchronousXhr(url){
-  var xhr = getXhr();
-  if (xhr) {
-    xhr.open('GET', url, false);
-    xhr.send(null);
-  }
-}
-function getXhr() {
-  var root = 'undefined' == typeof window ? this : window;
-  if (root.XMLHttpRequest && ('file:' != root.location.protocol || !root.ActiveXObject)) {
-    return new XMLHttpRequest;
-  } else {
-    try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
-  }
-  return false;
-};
-function sendJSONp(url, callback){
-  var self = this,
-      cb = callback,
-      timestamp = new Date().getTime(),
-      script = document.createElement('script'),
-      parent = document.getElementsByTagName('head')[0],
-      callbackName = 'keenJSONPCallback',
-      loaded = false;
-  callback = null;
-  callbackName += timestamp;
-  while (callbackName in window) {
-    callbackName += 'a';
-  }
-  window[callbackName] = function(response) {
-    if (loaded === true) return;
-    loaded = true;
-    if (cb) {
-      cb.call(self, null, response);
-    }
-    cleanup();
-  };
-  script.src = url + '&jsonp=' + callbackName;
-  parent.appendChild(script);
-  script.onreadystatechange = function() {
-    if (loaded === false && this.readyState === 'loaded') {
-      loaded = true;
-      handleError();
-      cleanup();
-    }
-  };
-  script.onerror = function() {
-    if (loaded === false) {
-      loaded = true;
-      handleError();
-      cleanup();
-    }
-  };
-  function handleError(){
-    if (cb) {
-      cb.call(self, 'An error occurred!', null);
-    }
-  }
-  function cleanup(){
-    window[callbackName] = undefined;
-    try {
-      delete window[callbackName];
-    } catch(e){};
-    parent.removeChild(script);
-  }
-}
-function sendBeacon(url, callback){
-  var self = this,
-      cb = callback,
-      img = document.createElement('img'),
-      loaded = false;
-  callback = null;
-  img.onload = function() {
-    loaded = true;
-    if ('naturalHeight' in this) {
-      if (this.naturalHeight + this.naturalWidth === 0) {
-        this.onerror();
-        return;
-      }
-    } else if (this.width + this.height === 0) {
-      this.onerror();
-      return;
-    }
-    if (cb) {
-      cb.call(self);
-    }
-  };
-  img.onerror = function() {
-    loaded = true;
-    if (cb) {
-      cb.call(self, 'An error occurred!', null);
-    }
-  };
-  img.src = url + '&c=clv1';
-}
-},{"./extend-events":4,"./index":13,"./utils/base64":15,"./utils/each":18,"./utils/extend":19}],15:[function(require,module,exports){
-module.exports = require('keen-core/lib/utils/base64');
-},{"keen-core/lib/utils/base64":27}],16:[function(require,module,exports){
-var Cookies = require('js-cookie');
-var extend = require('./extend');
-module.exports = cookie;
-function cookie(str){
-  if (!arguments.length) return;
-  if (this instanceof cookie === false) {
-    return new cookie(str);
-  }
-  this.config = {
-    key: str,
-    options: {
-      expires: 365
-    }
-  };
-  this.data = this.get();
-  return this;
-}
-cookie.prototype.get = function(str){
-  var data = {};
-  if (Cookies.get(this.config.key)) {
-    data = Cookies.getJSON(this.config.key);
-  }
-  if (str && typeof data === 'object' && typeof data !== null) {
-    return (typeof data[str] !== 'undefined') ? data[str] : null;
-  }
-  else {
-    return data;
-  }
-};
-cookie.prototype.set = function(str, value){
-  if (!arguments.length || !this.enabled()) return this;
-  if (typeof str === 'string'  && arguments.length === 2) {
-    this.data[str] = value ? value : null;
-  }
-  else if (typeof str === 'object' && arguments.length === 1) {
-    extend(this.data, str);
-  }
-  Cookies.set(this.config.key, this.data, this.config.options);
-  return this;
-};
-cookie.prototype.expire = function(daysUntilExpire){
-  if (daysUntilExpire) {
-    Cookies.set(this.config.key, this.data, extend(this.config.options, { expires: daysUntilExpire }));
-  } else {
-    Cookies.remove(this.config.key);
-    this.data = {};
-  }
-  return this;
-};
-cookie.prototype.options = function(obj){
-  if (!arguments.length) return this.config.options;
-  this.config.options = (typeof obj === 'object') ? obj : {};
-  return this;
-};
-cookie.prototype.enabled = function(){
-  return navigator.cookieEnabled;
-};
-},{"./extend":19,"js-cookie":25}],17:[function(require,module,exports){
-module.exports = deepExtend;
-function deepExtend(target){
-  for (var i = 1; i < arguments.length; i++) {
-    if (target instanceof Array && arguments[i] instanceof Array) {
-      for (var j = 0; j < arguments[i].length; j++) {
-        if (target.indexOf(arguments[i][j]) < 0) {
-          target.push(arguments[i][j]);
-        }
-      }
-    }
-    else {
-      for (var prop in arguments[i]){
-        if ('undefined' !== typeof target[prop] && 'object' === typeof arguments[i][prop] && arguments[i][prop] !== null) {
-          deepExtend(target[prop], clone(arguments[i][prop]));
-        }
-        else if (arguments[i][prop] !== undefined) {
-          target[prop] = clone(arguments[i][prop]);
-        }
-      }
-    }
-  }
-  return target;
-}
-function clone(input){
-  return JSON.parse( JSON.stringify(input) );
-}
-},{}],18:[function(require,module,exports){
-module.exports = require('keen-core/lib/utils/each');
-},{"keen-core/lib/utils/each":28}],19:[function(require,module,exports){
-module.exports = require('keen-core/lib/utils/extend');
-},{"keen-core/lib/utils/extend":29}],20:[function(require,module,exports){
-var Emitter = require('component-emitter');
-var each = require('./each');
-/*
-  var myClickerCatcher = Keen.utils.listener(".nav li > a");
-  myClicker.on("click", function(e){
-  });
-  myClicker.once("click", function(e){ });
-  myClicker.off("click");
-  myClicker.off();
-*/
-module.exports = function(ctx){
-  ctx.domListeners = ctx.domListeners || {
-    /*
-    'click': {
-      '.nav li > a': [fn, fn, fn]
-    }
-    */
-  };
-  function listener(str){
-    if (!str) return;
-    if (this instanceof listener === false) {
-      return new listener(str);
-    }
-    this.selector = str;
-    return this;
-  }
-  listener.prototype.on = function(str, fn){
-    var self = this;
-    if (arguments.length !== 2 || 'string' !== typeof str || 'function' !== typeof fn) return this;
-    if ('undefined' === typeof ctx.domListeners[str]) {
-      addListener(str, eventHandler(str));
-      ctx.domListeners[str] = {};
-    }
-    ctx.domListeners[str][self.selector] = ctx.domListeners[str][self.selector] || [];
-    ctx.domListeners[str][self.selector].push(fn);
-    return self;
-  };
-  listener.prototype.once = function(str, fn){
-    var self = this;
-    function on() {
-      self.off(str, on);
-      return fn.apply(self, arguments);
-    }
-    on.fn = fn;
-    self.on(str, on);
-    return self;
-  };
-  listener.prototype.off = function(str, fn){
-    var self = this, survivors = [];
-    if (arguments.length === 2) {
-      each(ctx.domListeners[str][self.selector], function(handler, i){
-        if (handler === fn || handler.fn === fn) return;
-        survivors.push(handler);
-      });
-      ctx.domListeners[str][self.selector] = survivors;
-    }
-    else if (arguments.length === 1) {
-      try {
-        delete ctx.domListeners[str][self.selector];
-      }
-      catch(e){
-        ctx.domListeners[str][self.selector] = [];
-      }
-    }
-    else {
-      each(ctx.domListeners, function(hash, eventType){
-        try {
-          delete ctx.domListeners[eventType][self.selector];
-        }
-        catch(e){
-          ctx.domListeners[eventType][self.selector] = function(){};
-        }
-      });
-    }
-    return self;
-  };
-  function eventHandler(eventType){
-    return function(e){
-      var evt, target;
-      evt = e || window.event;
-      target = evt.target || evt.srcElement;
-      if ('undefined' === ctx.domListeners[eventType]) return;
-      each(ctx.domListeners[eventType], function(handlers, key){
-        if (matches(target, key)) {
-          each(handlers, function(fn, i){
-              fn(evt);
-          });
-        }
-        else if ('window' === key) {
-          each(handlers, function(fn, i){
-            fn(evt);
-          });
-        }
-        return;
-      });
-    };
-  }
-  return listener;
-}
-function addListener(eventType, fn){
-  if (document.addEventListener) {
-    document.addEventListener(eventType, fn, false);
-  } else {
-    document.attachEvent("on" + eventType, fn);
-  }
-}
-function matches(elem, selector) {
-  var nodeList = ( elem.parentNode || document ).querySelectorAll( selector ) || [],
-      i = nodeList.length;
-  while ( i-- ) {
-    if ( nodeList[i] == elem ) { return true; }
-  }
-  return false;
-}
-function deferClickEvent(evt, anchor, callback){
-  var timeout = 500,
-      targetAttr,
-      cbResponse;
-  if (anchor.getAttribute !== void 0) {
-    targetAttr = anchor.getAttribute("target");
-  } else if (anchor.target) {
-    targetAttr = anchor.target;
-  }
-  cbResponse = callback(evt);
-  if (('boolean' === typeof cbResponse && cbResponse === false) || evt.defaultPrevented || evt.returnValue === false) {
-    if (evt.preventDefault) {
-      evt.preventDefault();
-    }
-    evt.returnValue = false;
-    return false;
-  }
-  else if (targetAttr !== '_blank' && targetAttr !== 'blank' && !evt.metaKey) {
-    if (evt.preventDefault) {
-      evt.preventDefault();
-    }
-    evt.returnValue = false;
-    setTimeout(function(){
-      window.location = anchor.href;
-    }, timeout);
-  }
-  return false;
-}
-function deferFormSubmit(evt, form, callback){
-  var timeout = 500;
-  var cbResponse = callback(evt);
-  if (('boolean' === typeof cbResponse && cbResponse === false) || evt.defaultPrevented || evt.returnValue === false) {
-    if (evt.preventDefault) {
-      evt.preventDefault();
-    }
-    evt.returnValue = false;
-    return false;
-  }
-  else {
-    if (evt.preventDefault) {
-      evt.preventDefault();
-    }
-    evt.returnValue = false;
-    setTimeout(function(){
-      form.submit();
-    }, timeout);
-  }
-  return false;
-}
-},{"./each":18,"component-emitter":24}],21:[function(require,module,exports){
-var Emitter = require('component-emitter');
-function queue() {
-  if (this instanceof queue === false) {
-    return new queue();
-  }
-  this.capacity = 0;
-  this.config = {
-    capacity: 5000,
-    interval: 15
-  };
-  this.events = {
-  };
-  this.interval = 0;
-  this.timer = null;
-  return this;
-}
-Emitter(queue.prototype);
-queue.prototype.check = function() {
-  if (shouldFlushQueue(this)) {
-    this.flush();
-  }
-  if (this.config.interval === 0 || this.capacity === 0) {
-    this.pause();
-  }
-  return this;
-};
-queue.prototype.flush = function() {
-  this.emit('flush');
-  this.interval = 0;
-  return this;
-};
-queue.prototype.pause = function() {
-  if (this.timer) {
-    clearInterval(this.timer);
-    this.timer = null;
-  }
-  return this;
-};
-queue.prototype.start = function() {
-  var self = this;
-  self.pause();
-  self.timer = setInterval(function() {
-    self.interval++;
-    self.check();
-  }, 1000);
-  return self;
-};
-function shouldFlushQueue(props) {
-  if (props.capacity > 0 && props.interval >= props.config.interval) {
-    return true;
-  }
-  else if (props.capacity >= props.config.capacity) {
-    return true;
-  }
-  return false;
-}
-module.exports = queue;
-},{"component-emitter":24}],22:[function(require,module,exports){
-/*
-  This is a modified copy of https://github.com/defunctzombie/form-serialize/ v0.7.1
-  Includes a new configuration option:
-    * ignoreTypes - Array, Default: [], Example: [ 'password' ]
-*/
-var k_r_submitter = /^(?:submit|button|image|reset|file)$/i;
-var k_r_success_contrls = /^(?:input|select|textarea|keygen)/i;
-var brackets = /(\[[^\[\]]*\])/g;
-function serialize(form, options) {
-  if (typeof options != 'object') {
-    options = { hash: !!options };
-  }
-  else if (options.hash === undefined) {
-    options.hash = true;
-  }
-  var result = (options.hash) ? {} : '';
-  var serializer = options.serializer || ((options.hash) ? hash_serializer : str_serialize);
-  var elements = form && form.elements ? form.elements : [];
-  var radio_store = Object.create(null);
-  for (var i=0 ; i<elements.length ; ++i) {
-    var element = elements[i];
-    if (options.ignoreTypes && options.ignoreTypes.indexOf(element.type) > -1) {
-      continue;
-    }
-    if ((!options.disabled && element.disabled) || !element.name) {
-      continue;
-    }
-    if (!k_r_success_contrls.test(element.nodeName) ||
-      k_r_submitter.test(element.type)) {
-      continue;
-    }
-    var key = element.name;
-    var val = element.value;
-    if ((element.type === 'checkbox' || element.type === 'radio') && !element.checked) {
-      val = undefined;
-    }
-    if (options.empty) {
-      if (element.type === 'checkbox' && !element.checked) {
-        val = '';
-      }
-      if (element.type === 'radio') {
-        if (!radio_store[element.name] && !element.checked) {
-          radio_store[element.name] = false;
-        }
-        else if (element.checked) {
-          radio_store[element.name] = true;
-        }
-      }
-      if (val == undefined && element.type == 'radio') {
-        continue;
-      }
-    }
-    else {
-      if (!val) {
-        continue;
-      }
-    }
-    if (element.type === 'select-multiple') {
-      val = [];
-      var selectOptions = element.options;
-      var isSelectedOptions = false;
-      for (var j=0 ; j<selectOptions.length ; ++j) {
-        var option = selectOptions[j];
-        var allowedEmpty = options.empty && !option.value;
-        var hasValue = (option.value || allowedEmpty);
-        if (option.selected && hasValue) {
-          isSelectedOptions = true;
-          if (options.hash && key.slice(key.length - 2) !== '[]') {
-            result = serializer(result, key + '[]', option.value);
-          }
-          else {
-            result = serializer(result, key, option.value);
-          }
-        }
-      }
-      if (!isSelectedOptions && options.empty) {
-        result = serializer(result, key, '');
-      }
-      continue;
-    }
-    result = serializer(result, key, val);
-  }
-  if (options.empty) {
-    for (var key in radio_store) {
-      if (!radio_store[key]) {
-        result = serializer(result, key, '');
-      }
-    }
-  }
-  return result;
-}
-function parse_keys(string) {
-  var keys = [];
-  var prefix = /^([^\[\]]*)/;
-  var children = new RegExp(brackets);
-  var match = prefix.exec(string);
-  if (match[1]) {
-      keys.push(match[1]);
-  }
-  while ((match = children.exec(string)) !== null) {
-      keys.push(match[1]);
-  }
-  return keys;
-}
-function hash_assign(result, keys, value) {
-  if (keys.length === 0) {
-    result = value;
-    return result;
-  }
-  var key = keys.shift();
-  var between = key.match(/^\[(.+?)\]$/);
-  if (key === '[]') {
-    result = result || [];
-    if (Array.isArray(result)) {
-      result.push(hash_assign(null, keys, value));
-    }
-    else {
-      result._values = result._values || [];
-      result._values.push(hash_assign(null, keys, value));
-    }
-    return result;
-  }
-  if (!between) {
-    result[key] = hash_assign(result[key], keys, value);
-  }
-  else {
-    var string = between[1];
-    var index = +string;
-    if (isNaN(index)) {
-      result = result || {};
-      result[string] = hash_assign(result[string], keys, value);
-    }
-    else {
-      result = result || [];
-      result[index] = hash_assign(result[index], keys, value);
-    }
-  }
-  return result;
-}
-function hash_serializer(result, key, value) {
-  var matches = key.match(brackets);
-  if (matches) {
-    var keys = parse_keys(key);
-    hash_assign(result, keys, value);
-  }
-  else {
-    var existing = result[key];
-    if (existing) {
-      if (!Array.isArray(existing)) {
-        result[key] = [ existing ];
-      }
-      result[key].push(value);
-    }
-    else {
-      result[key] = value;
-    }
-  }
-  return result;
-}
-function str_serialize(result, key, value) {
-  value = value.replace(/(\r)?\n/g, '\r\n');
-  value = encodeURIComponent(value);
-  value = value.replace(/%20/g, '+');
-  return result + (result ? '&' : '') + encodeURIComponent(key) + '=' + value;
-}
-module.exports = serialize;
-},{}],23:[function(require,module,exports){
-module.exports = timer;
-function timer(num){
-  if (this instanceof timer === false) {
-    return new timer(num);
-  }
-  this.count = num || 0;
-  return this;
-}
-timer.prototype.start = function(){
-  var self = this;
-  this.pause();
-  this.interval = setInterval(function(){
-    self.count++;
-  }, 1000);
-  return this;
-};
-timer.prototype.pause = function(){
-  clearInterval(this.interval);
-  return this;
-};
-timer.prototype.value = function(){
-  return this.count;
-};
-timer.prototype.clear = function(){
-  this.count = 0;
-  return this;
-};
-},{}],24:[function(require,module,exports){
-/** * Expose `Emitter`. */if (typeof module !== 'undefined') {  module.exports = Emitter;}/** * Initialize a new `Emitter`. * * @api public */function Emitter(obj) {  if (obj) return mixin(obj);};/** * Mixin the emitter properties. * * @param {Object} obj * @return {Object} * @api private */function mixin(obj) {  for (var key in Emitter.prototype) {    obj[key] = Emitter.prototype[key];  }  return obj;}/** * Listen on the given `event` with `fn`. * * @param {String} event * @param {Function} fn * @return {Emitter} * @api public */Emitter.prototype.on =Emitter.prototype.addEventListener = function(event, fn){  this._callbacks = this._callbacks || {};  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])    .push(fn);  return this;};/** * Adds an `event` listener that will be invoked a single * time then automatically removed. * * @param {String} event * @param {Function} fn * @return {Emitter} * @api public */Emitter.prototype.once = function(event, fn){  function on() {    this.off(event, on);    fn.apply(this, arguments);  }  on.fn = fn;  this.on(event, on);  return this;};/** * Remove the given callback for `event` or all * registered callbacks. * * @param {String} event * @param {Function} fn * @return {Emitter} * @api public */Emitter.prototype.off =Emitter.prototype.removeListener =Emitter.prototype.removeAllListeners =Emitter.prototype.removeEventListener = function(event, fn){  this._callbacks = this._callbacks || {};  if (0 == arguments.length) {    this._callbacks = {};    return this;  }  var callbacks = this._callbacks['$' + event];  if (!callbacks) return this;  if (1 == arguments.length) {    delete this._callbacks['$' + event];    return this;  }  var cb;  for (var i = 0; i < callbacks.length; i++) {    cb = callbacks[i];    if (cb === fn || cb.fn === fn) {      callbacks.splice(i, 1);      break;    }  }  return this;};/** * Emit `event` with the given args. * * @param {String} event * @param {Mixed} ... * @return {Emitter} */Emitter.prototype.emit = function(event){  this._callbacks = this._callbacks || {};  var args = [].slice.call(arguments, 1)    , callbacks = this._callbacks['$' + event];  if (callbacks) {    callbacks = callbacks.slice(0);    for (var i = 0, len = callbacks.length; i < len; ++i) {      callbacks[i].apply(this, args);    }  }  return this;};/** * Return array of callbacks for `event`. * * @param {String} event * @return {Array} * @api public */Emitter.prototype.listeners = function(event){  this._callbacks = this._callbacks || {};  return this._callbacks['$' + event] || [];};/** * Check if this emitter has `event` handlers. * * @param {String} event * @return {Boolean} * @api public */Emitter.prototype.hasListeners = function(event){  return !! this.listeners(event).length;};},{}],25:[function(require,module,exports){
-/*!
- * JavaScript Cookie v2.1.0
- * https://github.com/js-cookie/js-cookie
- *
- * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
- * Released under the MIT license
- */
-(function (factory) {
-	if (false) {
-		define(factory);
-	} else if (typeof exports === 'object') {
-		module.exports = factory();
-	} else {
-		var _OldCookies = window.Cookies;
-		var api = window.Cookies = factory();
-		api.noConflict = function () {
-			window.Cookies = _OldCookies;
-			return api;
-		};
-	}
-}(function () {
-	function extend () {
-		var i = 0;
-		var result = {};
-		for (; i < arguments.length; i++) {
-			var attributes = arguments[ i ];
-			for (var key in attributes) {
-				result[key] = attributes[key];
-			}
-		}
-		return result;
-	}
-	function init (converter) {
-		function api (key, value, attributes) {
-			var result;
-			if (arguments.length > 1) {
-				attributes = extend({
-					path: '/'
-				}, api.defaults, attributes);
-				if (typeof attributes.expires === 'number') {
-					var expires = new Date();
-					expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
-					attributes.expires = expires;
-				}
-				try {
-					result = JSON.stringify(value);
-					if (/^[\{\[]/.test(result)) {
-						value = result;
-					}
-				} catch (e) {}
-				if (!converter.write) {
-					value = encodeURIComponent(String(value))
-						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
-				} else {
-					value = converter.write(value, key);
-				}
-				key = encodeURIComponent(String(key));
-				key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
-				key = key.replace(/[\(\)]/g, escape);
-				return (document.cookie = [
-					key, '=', value,
-					attributes.expires && '; expires=' + attributes.expires.toUTCString(),
-					attributes.path    && '; path=' + attributes.path,
-					attributes.domain  && '; domain=' + attributes.domain,
-					attributes.secure ? '; secure' : ''
-				].join(''));
-			}
-			if (!key) {
-				result = {};
-			}
-			var cookies = document.cookie ? document.cookie.split('; ') : [];
-			var rdecode = /(%[0-9A-Z]{2})+/g;
-			var i = 0;
-			for (; i < cookies.length; i++) {
-				var parts = cookies[i].split('=');
-				var name = parts[0].replace(rdecode, decodeURIComponent);
-				var cookie = parts.slice(1).join('=');
-				if (cookie.charAt(0) === '"') {
-					cookie = cookie.slice(1, -1);
-				}
-				try {
-					cookie = converter.read ?
-						converter.read(cookie, name) : converter(cookie, name) ||
-						cookie.replace(rdecode, decodeURIComponent);
-					if (this.json) {
-						try {
-							cookie = JSON.parse(cookie);
-						} catch (e) {}
-					}
-					if (key === name) {
-						result = cookie;
-						break;
-					}
-					if (!key) {
-						result[name] = cookie;
-					}
-				} catch (e) {}
-			}
-			return result;
-		}
-		api.get = api.set = api;
-		api.getJSON = function () {
-			return api.apply({
-				json: true
-			}, [].slice.call(arguments));
-		};
-		api.defaults = {};
-		api.remove = function (key, attributes) {
-			api(key, '', extend(attributes, {
-				expires: -1
-			}));
-		};
-		api.withConverter = init;
-		return api;
-	}
-	return init(function () {});
-}));
-},{}],26:[function(require,module,exports){
-(function (global){
-(function(env){
-  var previousKeen = env.Keen || undefined;
-  var each = require('./utils/each'),
-      extend = require('./utils/extend'),
-      parseParams = require('./utils/parse-params'),
-      serialize = require('./utils/serialize');
-  var Emitter = require('component-emitter');
-  function Client(props){
-    if (this instanceof Client === false) {
-      return new Client(props);
-    }
-    this.configure(props);
-    if (Client.debug) {
-      this.on('error', Client.log);
-    }
-    this.emit('ready');
-    Client.emit('client', this);
-  }
-  if (previousKeen && typeof previousKeen.resources === 'undefined') {
-    Client.legacyVersion = previousKeen;
-  }
-  Emitter(Client);
-  Emitter(Client.prototype);
-  extend(Client, {
-    debug: false,
-    enabled: true,
-    loaded: false,
-    version: '1.5.3'
-  });
-  Client.helpers = Client.helpers || {};
-  Client.resources = Client.resources || {};
-  extend(Client.resources, {
-    'base'      : '{protocol}://{host}',
-    'version'   : '{protocol}://{host}/3.0',
-    'projects'  : '{protocol}://{host}/3.0/projects',
-    'projectId' : '{protocol}://{host}/3.0/projects/{projectId}',
-    'events'    : '{protocol}://{host}/3.0/projects/{projectId}/events',
-    'queries'   : '{protocol}://{host}/3.0/projects/{projectId}/queries'
-  });
-  Client.utils = Client.utils || {};
-  extend(Client.utils, {
-    'each'        : each,
-    'extend'      : extend,
-    'parseParams' : parseParams,
-    'serialize'   : serialize
-  });
-  Client.extendLibrary = function(target, source) {
-    var previous = previousKeen || source;
-    if (isDefined(previous) && isDefined(previous.resources)) {
-      each(previous, function(value, key) {
-        if (typeof value === 'object') {
-          target[key] = target[key] || {};
-          extend(target[key], value);
-        }
-        else {
-          target[key] = target[key] || value;
-        }
-      });
-      extend(target.prototype, previous.prototype);
-    }
-    return target;
-  };
-  Client.log = function(str){
-    if (Client.debug && typeof console === 'object') {
-      console.log('[Keen]', str);
-    }
-  };
-  Client.noConflict = function(){
-    if (typeof env.Keen !== 'undefined') {
-      env.Keen = Client.legacyVersion || previousKeen;
-    }
-    return Client;
-  };
-  Client.ready = function(fn){
-    if (Client.loaded) {
-      fn();
-    }
-    else {
-      Client.once('ready', fn);
-    }
-  };
-  Client.prototype.configure = function(obj){
-    var config = obj || {};
-    this.config = this.config || {
-      projectId    : undefined,
-      writeKey     : undefined,
-      host         : 'api.keen.io',
-      protocol     : 'https',
-      requestType  : 'jsonp',
-      resources    : extend({}, Client.resources)
-    };
-    if (typeof window !== 'undefined' && window.navigator && window.navigator.userAgent && window.navigator.userAgent.indexOf('MSIE') > -1) {
-      config.protocol = document.location.protocol.replace(':', '');
-    }
-    if (config.host) {
-      config.host.replace(/.*?:\/\//g, '');
-    }
-    extend(this.config, config);
-    return this;
-  };
-  Client.prototype.masterKey = function(str){
-    if (!arguments.length) return this.config.masterKey;
-    this.config.masterKey = str ? String(str) : null;
-    return this;
-  };
-  Client.prototype.projectId = function(str){
-    if (!arguments.length) return this.config.projectId;
-    this.config.projectId = (str ? String(str) : null);
-    return this;
-  };
-  Client.prototype.resources = function(obj){
-    if (!arguments.length) return this.config.resources;
-    var self = this;
-    if (typeof obj === 'object') {
-      each(obj, function(value, key){
-        self.config.resources[key] = (value ? value : null);
-      });
-    }
-    return self;
-  };
-  Client.prototype.url = function(name){
-    var args = Array.prototype.slice.call(arguments, 1),
-        baseUrl = this.config.resources.base || '{protocol}://{host}',
-        path;
-    if (name && typeof name === 'string') {
-      if (this.config.resources[name]) {
-        path = this.config.resources[name];
-      }
-      else {
-        path = baseUrl + name;
-      }
-    }
-    else {
-      path = baseUrl;
-    }
-    each(this.config, function(value, key){
-      if (typeof value !== 'object') {
-        path = path.replace('{' + key + '}', value);
-      }
-    });
-    each(args, function(arg, i){
-      if (typeof arg === 'string') {
-        path += '/' + arg;
-      }
-      else if (typeof arg === 'object') {
-        path += '?';
-        each(arg, function(value, key){
-          path += key + '=' + value + '&';
-        });
-        path = path.slice(0, -1);
-      }
-    });
-    return path;
-  };
-  domReady(function(){
-    Client.loaded = true;
-    Client.emit('ready');
-  });
-  function domReady(fn){
-    if (Client.loaded || typeof document === 'undefined') {
-      fn();
-      return;
-    }
-    if(document.readyState == null && document.addEventListener){
-      document.addEventListener('DOMContentLoaded', function DOMContentLoaded(){
-        document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);
-        document.readyState = 'complete';
-      }, false);
-      document.readyState = 'loading';
-    }
-    testDom(fn);
-  }
-  function testDom(fn){
-    if (/in/.test(document.readyState)) {
-      setTimeout(function(){
-        testDom(fn);
-      }, 9);
-    }
-    else {
-      fn();
-    }
-  }
-  function isDefined(target) {
-    return typeof target !== 'undefined';
-  }
-  function isUndefined(target) {
-    return typeof target === 'undefined';
-  }
-  module.exports = Client;
-}).call(this, typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {});
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./utils/each":28,"./utils/extend":29,"./utils/parse-params":30,"./utils/serialize":31,"component-emitter":24}],27:[function(require,module,exports){
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
 module.exports = {
   map: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
   encode: function (n) {
@@ -1826,59 +1824,737 @@ module.exports = {
     }
   }
 };
-},{}],28:[function(require,module,exports){
-module.exports = each;
-function each(o, cb, s){
-  var n;
-  if (!o){
-    return 0;
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.recordEvent = recordEvent;
+exports.recordEvents = recordEvents;
+exports.addEvent = addEvent;
+exports.addEvents = addEvents;
+
+var _index = __webpack_require__(3);
+
+var _index2 = _interopRequireDefault(_index);
+
+var _base = __webpack_require__(23);
+
+var _base2 = _interopRequireDefault(_base);
+
+var _each = __webpack_require__(0);
+
+var _each2 = _interopRequireDefault(_each);
+
+var _extend = __webpack_require__(1);
+
+var _extend2 = _interopRequireDefault(_extend);
+
+var _extendEvents = __webpack_require__(8);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// ------------------------------
+// .recordEvent
+// ------------------------------
+
+function recordEvent(eventCollection, eventBody, callback, asyncMode) {
+  var url, data, cb, getRequestUrl, getRequestUrlOkLength, extendedEventBody, isAsync;
+
+  url = this.url('events', encodeURIComponent(eventCollection));
+  data = {};
+  cb = callback;
+
+  // Requests are asynchronous by default
+  isAsync = 'boolean' === typeof asyncMode ? asyncMode : true;
+
+  if (!checkValidation.call(this, cb)) {
+    return;
   }
-  s = !s ? o : s;
-  if (o instanceof Array){
-    for (n=0; n<o.length; n++) {
-      if (cb.call(s, o[n], n, o) === false){
-        return 0;
-      }
+
+  if (!eventCollection || typeof eventCollection !== 'string') {
+    handleValidationError.call(this, 'Collection name must be a string.', cb);
+    return;
+  }
+
+  // ------------------------------
+  // DEPRECATED
+  // Apply client.globalProperties
+  // ------------------------------
+  if (this.config.globalProperties) {
+    data = this.config.globalProperties(eventCollection);
+  }
+  (0, _extend2.default)(data, eventBody);
+
+  // ------------------------------
+  // Run extendEvent(s) transforms
+  // ------------------------------
+  extendedEventBody = {};
+  (0, _extendEvents.getExtendedEventBody)(extendedEventBody, this.extensions.events);
+  (0, _extendEvents.getExtendedEventBody)(extendedEventBody, this.extensions.collections[eventCollection]);
+  (0, _extendEvents.getExtendedEventBody)(extendedEventBody, [data]);
+
+  this.emit('recordEvent', eventCollection, extendedEventBody);
+
+  if (!_index2.default.enabled) {
+    handleValidationError.call(this, 'Keen.enabled is set to false.', cb);
+    return false;
+  }
+
+  // ------------------------------
+  // Send event
+  // ------------------------------
+
+  getRequestUrl = this.url('events', encodeURIComponent(eventCollection), {
+    api_key: this.writeKey(),
+    data: encodeURIComponent(_base2.default.encode(JSON.stringify(extendedEventBody))),
+    modified: new Date().getTime()
+  });
+  getRequestUrlOkLength = getRequestUrl.length < getUrlMaxLength();
+
+  if (isAsync) {
+    switch (this.config.requestType) {
+      case 'xhr':
+        sendXhr.call(this, 'POST', url, extendedEventBody, cb);
+        break;
+      case 'beacon':
+        if (navigator.sendBeacon) {
+          var beacon_url = this.url('events', encodeURIComponent(eventCollection), { api_key: this.writeKey() });
+          navigator.sendBeacon(beacon_url, JSON.stringify(extendedEventBody));
+        } else if (getRequestUrlOkLength) {
+          sendBeacon.call(this, getRequestUrl, cb);
+        } else {
+          attemptPostXhr.call(this, url, extendedEventBody, 'Beacon URL length exceeds current browser limit, and XHR is not supported.', cb);
+        }
+        break;
+      default:
+        if (getRequestUrlOkLength) {
+          sendJSONp.call(this, getRequestUrl, cb);
+        } else {
+          attemptPostXhr.call(this, url, extendedEventBody, 'JSONp URL length exceeds current browser limit, and XHR is not supported.', cb);
+        }
+        break;
     }
   } else {
-    for (n in o){
-      if (o.hasOwnProperty(n)) {
-        if (cb.call(s, o[n], n, o) === false){
-          return 0;
+    // Send synchronous request
+    if (getRequestUrlOkLength) {
+      sendSynchronousXhr(getRequestUrl);
+    }
+  }
+
+  callback = cb = null;
+  return this;
+}
+
+// ------------------------------
+// .recordEvents
+// ------------------------------
+
+function recordEvents(eventsHash, callback) {
+  var self = this,
+      url,
+      cb,
+      extendedEventsHash;
+
+  url = this.url('events');
+  cb = callback;
+  callback = null;
+
+  if (!checkValidation.call(this, cb)) {
+    return;
+  }
+
+  if ('object' !== (typeof eventsHash === 'undefined' ? 'undefined' : _typeof(eventsHash)) || eventsHash instanceof Array) {
+    handleValidationError.call(this, 'First argument must be an object', cb);
+    return;
+  }
+
+  if (arguments.length > 2) {
+    handleValidationError.call(this, 'Incorrect arguments provided to #recordEvents method', cb);
+    return;
+  }
+
+  // ------------------------------
+  // DEPRECATED
+  // Apply client.globalProperties
+  // ------------------------------
+  if (this.config.globalProperties) {
+    // Loop over each set of events
+    (0, _each2.default)(eventsHash, function (events, collection) {
+      // Loop over each individual event
+      (0, _each2.default)(events, function (body, index) {
+        // Start with global properties for this collection
+        var modified = self.config.globalProperties(collection);
+        // Apply provided properties for this event body
+        eventsHash[collection][index] = (0, _extend2.default)(modified, body);
+      });
+    });
+  }
+
+  // ------------------------------
+  // Run extendEvent(s) transforms
+  // ------------------------------
+  extendedEventsHash = {};
+  (0, _each2.default)(eventsHash, function (eventList, eventCollection) {
+    // Find or create collection on new hash
+    extendedEventsHash[eventCollection] = extendedEventsHash[eventCollection] || [];
+    // Loop over each eventBody in the existing hash
+    (0, _each2.default)(eventList, function (eventBody, index) {
+      // Create a new data object
+      var extendedEventBody = {};
+      // Process "events" transform pipeline
+      (0, _extendEvents.getExtendedEventBody)(extendedEventBody, self.extensions.events);
+      // Process "collection" transform pipeline
+      (0, _extendEvents.getExtendedEventBody)(extendedEventBody, self.extensions.collections[eventCollection]);
+      // Blend existing eventBody data into the result
+      (0, _extendEvents.getExtendedEventBody)(extendedEventBody, [eventBody]);
+      // Push extendedEventBody into new hash
+      extendedEventsHash[eventCollection].push(extendedEventBody);
+    });
+  });
+
+  this.emit('recordEvents', extendedEventsHash);
+
+  if (!_index2.default.enabled) {
+    handleValidationError.call(this, 'Keen.enabled is set to false.', cb);
+    return false;
+  }
+
+  if (getXhr()) {
+    sendXhr.call(this, 'POST', url, extendedEventsHash, cb);
+  } else {
+    // each(eventsHash, function(eventArray, eventCollection){
+    //    ... send each individually?
+    // });
+  }
+
+  callback = cb = null;
+  return this;
+}
+
+// ----------------------
+// DEPRECATED
+// ----------------------
+
+function addEvent() {
+  this.emit('error', 'This method has been deprecated. Check out #recordEvent: https://github.com/keen/keen-tracking.js#record-a-single-event');
+  recordEvent.apply(this, arguments);
+}
+
+function addEvents() {
+  this.emit('error', 'This method has been deprecated. Check out #recordEvents: https://github.com/keen/keen-tracking.js#record-multiple-events');
+  recordEvents.apply(this, arguments);
+}
+
+// ------------------------------
+// Validation
+// ------------------------------
+
+function checkValidation(callback) {
+  var cb = callback;
+  callback = null;
+
+  if (!this.projectId()) {
+    handleValidationError.call(this, 'Keen.Client is missing a projectId property.', cb);
+    return false;
+  }
+  if (!this.writeKey()) {
+    handleValidationError.call(this, 'Keen.Client is missing a writeKey property.', cb);
+    return false;
+  }
+  return true;
+}
+
+function handleValidationError(message, cb) {
+  var err = 'Event(s) not recorded: ' + message;
+  this.emit('error', err);
+  if (cb) {
+    cb.call(this, err, null);
+    cb = null;
+  }
+}
+
+function getUrlMaxLength() {
+  if ('undefined' !== typeof window && navigator) {
+    if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
+      return 2000;
+    }
+  }
+  return 16000;
+}
+
+// ------------------------------
+// XHR Requests
+// ------------------------------
+
+function attemptPostXhr(url, data, noXhrError, callback) {
+  if (getXhr()) {
+    sendXhr.call(this, 'POST', url, data, callback);
+  } else {
+    handleValidationError.call(this, noXhrError);
+  }
+}
+
+function sendXhr(method, url, data, callback) {
+  var self = this;
+  var payload;
+  var xhr = getXhr();
+  var cb = callback;
+  callback = null;
+
+  xhr.onreadystatechange = function () {
+    var response;
+    if (xhr.readyState == 4) {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          response = JSON.parse(xhr.responseText);
+        } catch (e) {
+          _index2.default.emit('error', 'Could not parse HTTP response: ' + xhr.responseText);
+          if (cb) {
+            cb.call(self, xhr, null);
+          }
+        }
+        if (cb && response) {
+          cb.call(self, null, response);
+        }
+      } else {
+        _index2.default.emit('error', 'HTTP request failed.');
+        if (cb) {
+          cb.call(self, xhr, null);
         }
       }
     }
+  };
+
+  xhr.open(method, url, true);
+  xhr.setRequestHeader('Authorization', self.writeKey());
+  xhr.setRequestHeader('Content-Type', 'application/json');
+
+  if (data) {
+    payload = JSON.stringify(data);
   }
-  return 1;
+
+  if (method.toUpperCase() === 'GET') {
+    xhr.send();
+  }
+  if (method.toUpperCase() === 'POST') {
+    xhr.send(payload);
+  }
 }
-},{}],29:[function(require,module,exports){
-module.exports = extend;
-function extend(target){
-  for (var i = 1; i < arguments.length; i++) {
-    for (var prop in arguments[i]){
-      target[prop] = arguments[i][prop];
+
+function sendSynchronousXhr(url) {
+  var xhr = getXhr();
+  if (xhr) {
+    xhr.open('GET', url, false);
+    xhr.send(null);
+  }
+}
+
+function getXhr() {
+  // yay, superagent!
+  var root = 'undefined' == typeof window ? this : window;
+  if (root.XMLHttpRequest && ('file:' != root.location.protocol || !root.ActiveXObject)) {
+    return new XMLHttpRequest();
+  } else {
+    try {
+      return new ActiveXObject('Microsoft.XMLHTTP');
+    } catch (e) {}
+    try {
+      return new ActiveXObject('Msxml2.XMLHTTP.6.0');
+    } catch (e) {}
+    try {
+      return new ActiveXObject('Msxml2.XMLHTTP.3.0');
+    } catch (e) {}
+    try {
+      return new ActiveXObject('Msxml2.XMLHTTP');
+    } catch (e) {}
+  }
+  return false;
+};
+
+// ------------------------------
+// JSON-P Requests
+// ------------------------------
+
+function sendJSONp(url, callback) {
+  var self = this,
+      cb = callback,
+      timestamp = new Date().getTime(),
+      script = document.createElement('script'),
+      parent = document.getElementsByTagName('head')[0],
+      callbackName = 'keenJSONPCallback',
+      loaded = false;
+
+  callback = null;
+
+  callbackName += timestamp;
+  while (callbackName in window) {
+    callbackName += 'a';
+  }
+  window[callbackName] = function (response) {
+    if (loaded === true) return;
+    loaded = true;
+    if (cb) {
+      cb.call(self, null, response);
+    }
+    cleanup();
+  };
+  script.src = url + '&jsonp=' + callbackName;
+  parent.appendChild(script);
+
+  // for early IE w/ no onerror event
+  script.onreadystatechange = function () {
+    if (loaded === false && this.readyState === 'loaded') {
+      loaded = true;
+      handleError();
+      cleanup();
+    }
+  };
+  // non-ie, etc
+  script.onerror = function () {
+    // on IE9 both onerror and onreadystatechange are called
+    if (loaded === false) {
+      loaded = true;
+      handleError();
+      cleanup();
+    }
+  };
+
+  function handleError() {
+    if (cb) {
+      cb.call(self, 'An error occurred!', null);
     }
   }
-  return target;
-};
-},{}],30:[function(require,module,exports){
-module.exports = parseParams;
-function parseParams(str){
-  var urlParams = {},
-      match,
-      pl     = /\+/g, 
-      search = /([^&=]+)=?([^&]*)/g,
-      decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-      query  = str.split("?")[1];
-  while (!!(match=search.exec(query))) {
-    urlParams[decode(match[1])] = decode(match[2]);
+
+  function cleanup() {
+    window[callbackName] = undefined;
+    try {
+      delete window[callbackName];
+    } catch (e) {};
+    parent.removeChild(script);
   }
-  return urlParams;
+}
+
+// ------------------------------
+// Image Beacon Requests
+// ------------------------------
+
+function sendBeacon(url, callback) {
+  var self = this,
+      cb = callback,
+      img = document.createElement('img'),
+      loaded = false;
+
+  callback = null;
+
+  img.onload = function () {
+    loaded = true;
+    if ('naturalHeight' in this) {
+      if (this.naturalHeight + this.naturalWidth === 0) {
+        this.onerror();
+        return;
+      }
+    } else if (this.width + this.height === 0) {
+      this.onerror();
+      return;
+    }
+    if (cb) {
+      cb.call(self);
+    }
+  };
+  img.onerror = function () {
+    loaded = true;
+    if (cb) {
+      cb.call(self, 'An error occurred!', null);
+    }
+  };
+  img.src = url + '&c=clv1';
+}
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.listenerCore = undefined;
+
+var _componentEmitter = __webpack_require__(2);
+
+var _componentEmitter2 = _interopRequireDefault(_componentEmitter);
+
+var _each = __webpack_require__(0);
+
+var _each2 = _interopRequireDefault(_each);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+
+  // Create a new element listner
+  var myClickerCatcher = Keen.utils.listener(".nav li > a");
+
+  // Listen for a given event
+  myClicker.on("click", function(e){
+    // do stuff!
+  });
+
+  // Listen for event once
+  myClicker.once("click", function(e){ });
+
+  // Cancel a given event listener
+  myClicker.off("click");
+
+  // Cancel all event listners
+  myClicker.off();
+
+*/
+
+var listenerCore = exports.listenerCore = function listenerCore(ctx) {
+
+  // Make sure this object exists
+  ctx.domListeners = ctx.domListeners || {
+    /*
+    'click': {
+      '.nav li > a': [fn, fn, fn]
+    }
+    */
+  };
+
+  function listener(str) {
+    if (!str) return;
+    if (this instanceof listener === false) {
+      return new listener(str);
+    }
+    this.selector = str;
+    return this;
+  }
+
+  listener.prototype.on = function (str, fn) {
+    var self = this;
+
+    if (arguments.length !== 2 || 'string' !== typeof str || 'function' !== typeof fn) return this;
+
+    // Set each listener on a parent dictionary, indexed by event:
+    if ('undefined' === typeof ctx.domListeners[str]) {
+      addListener(str, eventHandler(str));
+      ctx.domListeners[str] = {};
+    }
+    ctx.domListeners[str][self.selector] = ctx.domListeners[str][self.selector] || [];
+    ctx.domListeners[str][self.selector].push(fn);
+    return self;
+  };
+
+  listener.prototype.once = function (str, fn) {
+    var self = this;
+    function on() {
+      self.off(str, on);
+      return fn.apply(self, arguments);
+    }
+    on.fn = fn;
+    self.on(str, on);
+    return self;
+  };
+
+  listener.prototype.off = function (str, fn) {
+    var self = this,
+        survivors = [];
+    if (arguments.length === 2) {
+      (0, _each2.default)(ctx.domListeners[str][self.selector], function (handler, i) {
+        if (handler === fn || handler.fn === fn) return;
+        survivors.push(handler);
+      });
+      ctx.domListeners[str][self.selector] = survivors;
+    } else if (arguments.length === 1) {
+      try {
+        delete ctx.domListeners[str][self.selector];
+      } catch (e) {
+        ctx.domListeners[str][self.selector] = [];
+      }
+    } else {
+      // loop over every eventType and delete handlers
+      (0, _each2.default)(ctx.domListeners, function (hash, eventType) {
+        // if ('undefined' === typeof hash[str]) return;
+        try {
+          delete ctx.domListeners[eventType][self.selector];
+        } catch (e) {
+          ctx.domListeners[eventType][self.selector] = function () {};
+        }
+      });
+    }
+    return self;
+  };
+
+  function eventHandler(eventType) {
+    return function (e) {
+      var evt, target;
+
+      evt = e || window.event;
+      target = evt.target || evt.srcElement;
+
+      // If nothing assigned to this event type, let it go
+      if ('undefined' === ctx.domListeners[eventType]) return;
+
+      (0, _each2.default)(ctx.domListeners[eventType], function (handlers, key) {
+
+        if (matches(target, key)) {
+          // Call all handlers for this eventType + node
+          (0, _each2.default)(handlers, function (fn, i) {
+            // if ('click' === eventType && 'A' === target.nodeName) {
+            //   deferClickEvent(evt, target, fn);
+            // }
+            // else if ('submit' === eventType && 'FORM' === target.nodeName) {
+            //   deferFormSubmit(evt, target, fn);
+            // }
+            // else {
+            fn(evt);
+            // }
+          });
+        } else if ('window' === key) {
+          // Call all handlers
+          (0, _each2.default)(handlers, function (fn, i) {
+            fn(evt);
+          });
+        }
+        return;
+      });
+    };
+  }
+
+  return listener;
 };
-},{}],31:[function(require,module,exports){
-var each = require('./each'),
-    extend = require('./extend');
+
+// ------------------------------
+// Attach global event listener
+// ------------------------------
+
+function addListener(eventType, fn) {
+  if (document.addEventListener) {
+    document.addEventListener(eventType, fn, false);
+  } else {
+    document.attachEvent("on" + eventType, fn);
+  }
+}
+
+// ------------------------------
+// Match DOM element to selector
+// ------------------------------
+
+function matches(elem, selector) {
+  // We'll use querySelectorAll to find all element matching the selector,
+  // then check if the given element is included in that list.
+  // Executing the query on the parentNode reduces the resulting nodeList,
+  // document doesn't have a parentNode, though.
+  var nodeList = (elem.parentNode || document).querySelectorAll(selector) || [],
+      i = nodeList.length;
+
+  // loop on the nodeList
+  while (i--) {
+    if (nodeList[i] == elem) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// ------------------------------
+// Handle 'click' events (A)
+// ------------------------------
+
+function deferClickEvent(evt, anchor, callback) {
+  var timeout = 500,
+      targetAttr,
+      cbResponse;
+
+  // Get 'target' attribute from anchor
+  if (anchor.getAttribute !== void 0) {
+    targetAttr = anchor.getAttribute("target");
+  } else if (anchor.target) {
+    targetAttr = anchor.target;
+  }
+
+  // Fire listener and catch possible response (return false)
+  cbResponse = callback(evt);
+
+  // If prevented within callback, bail:
+  if ('boolean' === typeof cbResponse && cbResponse === false || evt.defaultPrevented || evt.returnValue === false) {
+    if (evt.preventDefault) {
+      evt.preventDefault();
+    }
+    evt.returnValue = false;
+    return false;
+  }
+  // Else if anchor doesn't kick off a new window or tab.. defer and replay the event:
+  else if (targetAttr !== '_blank' && targetAttr !== 'blank' && !evt.metaKey && !anchor.hasAttribute('download')) {
+      if (evt.preventDefault) {
+        evt.preventDefault();
+      }
+      evt.returnValue = false;
+      if (anchor.href && anchor.href !== '#' && anchor.href !== window.location + '#') {
+        setTimeout(function () {
+          window.location = anchor.href;
+        }, timeout);
+      }
+    }
+
+  return false;
+}
+
+// ------------------------------
+// Handle 'submit' events (FORM)
+// ------------------------------
+
+function deferFormSubmit(evt, form, callback) {
+  var timeout = 500;
+
+  // Fire listener and catch possible response (return false)
+  var cbResponse = callback(evt);
+
+  // If prevented within callback, bail
+  if ('boolean' === typeof cbResponse && cbResponse === false || evt.defaultPrevented || evt.returnValue === false) {
+    if (evt.preventDefault) {
+      evt.preventDefault();
+    }
+    evt.returnValue = false;
+    return false;
+  }
+  // Defer and replay event
+  else {
+      if (evt.preventDefault) {
+        evt.preventDefault();
+      }
+      evt.returnValue = false;
+      setTimeout(function () {
+        form.submit();
+      }, timeout);
+    }
+
+  return false;
+}
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var each = __webpack_require__(0),
+    extend = __webpack_require__(1);
+
 module.exports = serialize;
+
 function serialize(data){
   var query = [];
   each(data, function(value, key){
@@ -1889,76 +2565,499 @@ function serialize(data){
   });
   return query.join('&');
 }
-},{"./each":28,"./extend":29}],32:[function(require,module,exports){
-module.exports={
-  "name": "keen-tracking",
-  "version": "1.5.3",
-  "description": "Data Collection SDK for Keen IO",
-  "main": "lib/server.js",
-  "browser": "lib/browser.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/keen/keen-tracking.js.git"
-  },
-  "scripts": {
-    "start": "gulp with-tests",
-    "test": "gulp test:cli",
-    "regressiontest": "node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve'"
-  },
-  "bugs": "https://github.com/keen/keen-tracking.js/issues",
-  "author": "Dustin Larimer <dustin@keen.io> (https://keen.io/)",
-  "contributors": [
-    "Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)",
-    "Eric Anderson <eric@keen.io> (https://github.com/aroc)",
-    "Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)",
-    "Alex Kleissner <alex@keen.io> (https://github.com/hex337)"
-  ],
-  "license": "MIT",
-  "dependencies": {
-    "component-emitter": "^1.2.0",
-    "js-cookie": "2.1.0",
-    "keen-core": "^0.1.3"
-  },
-  "devDependencies": {
-    "browserify": "^9.0.8",
-    "chai": "^2.3.0",
-    "chai-spies": "^0.6.0",
-    "del": "^1.1.1",
-    "gulp": "^3.8.11",
-    "gulp-awspublish": "0.0.23",
-    "gulp-connect": "^2.2.0",
-    "gulp-derequire": "^2.1.0",
-    "gulp-mocha": "^2.0.1",
-    "gulp-mocha-phantomjs": "^0.6.1",
-    "gulp-remove-empty-lines": "0.0.2",
-    "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.5.3",
-    "gulp-sourcemaps": "^1.5.2",
-    "gulp-strip-comments": "^1.0.1",
-    "gulp-uglify": "^1.5.2",
-    "gulp-util": "^3.0.4",
-    "gulp-yuicompressor": "0.0.3",
-    "karma": "^1.7.1",
-    "karma-chrome-launcher": "^0.1.12",
-    "karma-firefox-launcher": "^0.1.6",
-    "karma-mocha": "^0.2.0",
-    "karma-nyan-reporter": "0.0.60",
-    "karma-requirejs": "^0.2.2",
-    "karma-safari-launcher": "^0.1.1",
-    "karma-sauce-launcher": "^0.2.11",
-    "mocha": "^2.2.5",
-    "moment": "^2.10.3",
-    "phantomjs": "^1.9.7-15",
-    "proclaim": "^3.3.0",
-    "requirejs": "^2.3.5",
-    "testcafe": "^0.20.2",
-    "testcafe-browser-provider-browserstack": "^1.3.0",
-    "testcafe-browser-provider-puppeteer": "^1.3.0",
-    "testcafe-browser-provider-saucelabs": "^1.3.0",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+module.exports = parseParams;
+
+function parseParams(str){
+  // via: http://stackoverflow.com/a/2880929/2511985
+  var urlParams = {},
+      match,
+      pl     = /\+/g,  // Regex for replacing addition symbol with a space
+      search = /([^&=]+)=?([^&]*)/g,
+      decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+      query  = str.split("?")[1];
+
+  while (!!(match=search.exec(query))) {
+    urlParams[decode(match[1])] = decode(match[2]);
+  }
+  return urlParams;
+};
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {(function(env){
+  var previousKeen = env.Keen || undefined;
+  var each = __webpack_require__(0),
+      extend = __webpack_require__(1),
+      parseParams = __webpack_require__(27),
+      serialize = __webpack_require__(26);
+
+  var Emitter = __webpack_require__(2);
+
+  function Client(props){
+    if (this instanceof Client === false) {
+      return new Client(props);
+    }
+    this.configure(props);
+
+    // Set up event handling
+    if (Client.debug) {
+      this.on('error', Client.log);
+    }
+    this.emit('ready');
+    Client.emit('client', this);
+  }
+
+  if (previousKeen && typeof previousKeen.resources === 'undefined') {
+    Client.legacyVersion = previousKeen;
+  }
+
+  Emitter(Client);
+  Emitter(Client.prototype);
+
+  extend(Client, {
+    debug: false,
+    enabled: true,
+    loaded: false,
+    version: '__VERSION__'
+  });
+
+  // Set or extend helpers
+  Client.helpers = Client.helpers || {};
+
+  // Set or extend resources
+  Client.resources = Client.resources || {};
+  extend(Client.resources, {
+    'base'      : '{protocol}://{host}',
+    'version'   : '{protocol}://{host}/3.0',
+    'projects'  : '{protocol}://{host}/3.0/projects',
+    'projectId' : '{protocol}://{host}/3.0/projects/{projectId}',
+    'events'    : '{protocol}://{host}/3.0/projects/{projectId}/events',
+    'queries'   : '{protocol}://{host}/3.0/projects/{projectId}/queries'
+  });
+
+  // Set or extend utils
+  Client.utils = Client.utils || {};
+  extend(Client.utils, {
+    'each'        : each,
+    'extend'      : extend,
+    'parseParams' : parseParams,
+    'serialize'   : serialize
+  });
+
+  Client.extendLibrary = function(target, source) {
+    var previous = previousKeen || source;
+    if (isDefined(previous) && isDefined(previous.resources)) {
+      each(previous, function(value, key) {
+        if (typeof value === 'object') {
+          target[key] = target[key] || {};
+          extend(target[key], value);
+        }
+        else {
+          target[key] = target[key] || value;
+        }
+      });
+      extend(target.prototype, previous.prototype);
+    }
+    return target;
+  };
+
+  Client.log = function(str){
+    if (Client.debug && typeof console === 'object') {
+      console.log('[Keen]', str);
+    }
+  };
+
+  Client.noConflict = function(){
+    if (typeof env.Keen !== 'undefined') {
+      env.Keen = Client.legacyVersion || previousKeen;
+    }
+    return Client;
+  };
+
+  Client.ready = function(fn){
+    if (Client.loaded) {
+      fn();
+    }
+    else {
+      Client.once('ready', fn);
+    }
+  };
+
+  Client.prototype.configure = function(obj){
+    var config = obj || {};
+    this.config = this.config || {
+      projectId    : undefined,
+      writeKey     : undefined,
+      host         : 'api.keen.io',
+      protocol     : 'https',
+      requestType  : 'jsonp',
+      resources    : extend({}, Client.resources)
+    };
+
+    // IE<10 request shim
+    if (typeof window !== 'undefined' && window.navigator && window.navigator.userAgent && window.navigator.userAgent.indexOf('MSIE') > -1) {
+      config.protocol = document.location.protocol.replace(':', '');
+    }
+
+    if (config.host) {
+      config.host.replace(/.*?:\/\//g, '');
+    }
+
+    extend(this.config, config);
+    return this;
+  };
+
+  Client.prototype.masterKey = function(str){
+    if (!arguments.length) return this.config.masterKey;
+    this.config.masterKey = str ? String(str) : null;
+    return this;
+  };
+
+  Client.prototype.projectId = function(str){
+    if (!arguments.length) return this.config.projectId;
+    this.config.projectId = (str ? String(str) : null);
+    return this;
+  };
+
+  Client.prototype.resources = function(obj){
+    if (!arguments.length) return this.config.resources;
+    var self = this;
+    if (typeof obj === 'object') {
+      each(obj, function(value, key){
+        self.config.resources[key] = (value ? value : null);
+      });
+    }
+    return self;
+  };
+
+  Client.prototype.url = function(name){
+    var args = Array.prototype.slice.call(arguments, 1),
+        baseUrl = this.config.resources.base || '{protocol}://{host}',
+        path;
+
+    if (name && typeof name === 'string') {
+      if (this.config.resources[name]) {
+        path = this.config.resources[name];
+      }
+      else {
+        path = baseUrl + name;
+      }
+    }
+    else {
+      path = baseUrl;
+    }
+
+    each(this.config, function(value, key){
+      if (typeof value !== 'object') {
+        path = path.replace('{' + key + '}', value);
+      }
+    });
+
+    each(args, function(arg, i){
+      if (typeof arg === 'string') {
+        path += '/' + arg;
+      }
+      else if (typeof arg === 'object') {
+        path += '?';
+        each(arg, function(value, key){
+          path += key + '=' + value + '&';
+        });
+        path = path.slice(0, -1);
+      }
+    });
+
+    return path;
+  };
+
+  domReady(function(){
+    Client.loaded = true;
+    Client.emit('ready');
+  });
+
+  function domReady(fn){
+    if (Client.loaded || typeof document === 'undefined') {
+      fn();
+      return;
+    }
+    // Firefox 3.5 shim
+    if(document.readyState == null && document.addEventListener){
+      document.addEventListener('DOMContentLoaded', function DOMContentLoaded(){
+        document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);
+        document.readyState = 'complete';
+      }, false);
+      document.readyState = 'loading';
+    }
+    testDom(fn);
+  }
+
+  function testDom(fn){
+    if (/in/.test(document.readyState)) {
+      setTimeout(function(){
+        testDom(fn);
+      }, 9);
+    }
+    else {
+      fn();
+    }
+  }
+
+  function isDefined(target) {
+    return typeof target !== 'undefined';
+  }
+
+  function isUndefined(target) {
+    return typeof target === 'undefined';
+  }
+
+  module.exports = Client;
+
+}).call(this, typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {});
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(28)))
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Keen = undefined;
+
+var _index = __webpack_require__(3);
+
+var _index2 = _interopRequireDefault(_index);
+
+var _each = __webpack_require__(0);
+
+var _each2 = _interopRequireDefault(_each);
+
+var _extend = __webpack_require__(1);
+
+var _extend2 = _interopRequireDefault(_extend);
+
+var _listener = __webpack_require__(25);
+
+var _recordEventsBrowser = __webpack_require__(24);
+
+var _deferEvents = __webpack_require__(22);
+
+var _extendEvents = __webpack_require__(8);
+
+var _browserAutoTracking = __webpack_require__(21);
+
+var _getBrowserProfile = __webpack_require__(19);
+
+var _getDatetimeIndex = __webpack_require__(18);
+
+var _getDomainName = __webpack_require__(17);
+
+var _getDomNodePath = __webpack_require__(4);
+
+var _getDomNodeProfile = __webpack_require__(16);
+
+var _getScreenProfile = __webpack_require__(6);
+
+var _getScrollState = __webpack_require__(15);
+
+var _getUniqueId = __webpack_require__(14);
+
+var _getWindowProfile = __webpack_require__(5);
+
+var _cookie = __webpack_require__(13);
+
+var _deepExtend = __webpack_require__(7);
+
+var _serializeForm = __webpack_require__(11);
+
+var _timer = __webpack_require__(10);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// ------------------------
+// Methods
+// ------------------------
+(0, _extend2.default)(_index2.default.prototype, {
+  recordEvent: _recordEventsBrowser.recordEvent,
+  recordEvents: _recordEventsBrowser.recordEvents,
+  addEvent: _recordEventsBrowser.addEvent,
+  addEvents: _recordEventsBrowser.addEvents
+});
+(0, _extend2.default)(_index2.default.prototype, {
+  deferEvent: _deferEvents.deferEvent,
+  deferEvents: _deferEvents.deferEvents,
+  queueCapacity: _deferEvents.queueCapacity,
+  queueInterval: _deferEvents.queueInterval,
+  recordDeferredEvents: _deferEvents.recordDeferredEvents
+});
+(0, _extend2.default)(_index2.default.prototype, {
+  extendEvent: _extendEvents.extendEvent,
+  extendEvents: _extendEvents.extendEvents
+});
+
+// ------------------------
+// Auto-Tracking
+// ------------------------
+var initAutoTracking = (0, _browserAutoTracking.initAutoTrackingCore)(_index2.default);
+(0, _extend2.default)(_index2.default.prototype, {
+  initAutoTracking: initAutoTracking
+});
+
+// ------------------------
+// Deprecated
+// ------------------------
+_index2.default.prototype.trackExternalLink = trackExternalLink;
+
+// ------------------------
+// Helpers
+// ------------------------
+(0, _extend2.default)(_index2.default.helpers, {
+  getBrowserProfile: _getBrowserProfile.getBrowserProfile,
+  getDatetimeIndex: _getDatetimeIndex.getDatetimeIndex,
+  getDomainName: _getDomainName.getDomainName,
+  getDomNodePath: _getDomNodePath.getDomNodePath,
+  getDomNodeProfile: _getDomNodeProfile.getDomNodeProfile,
+  getScreenProfile: _getScreenProfile.getScreenProfile,
+  getScrollState: _getScrollState.getScrollState,
+  getUniqueId: _getUniqueId.getUniqueId,
+  getWindowProfile: _getWindowProfile.getWindowProfile
+});
+
+// ------------------------
+// Utils
+// ------------------------
+var listener = (0, _listener.listenerCore)(_index2.default);
+(0, _extend2.default)(_index2.default.utils, {
+  cookie: _cookie.cookie,
+  deepExtend: _deepExtend.deepExtend,
+  listener: listener,
+  serializeForm: _serializeForm.serializeForm,
+  timer: _timer.timer
+});
+
+_index2.default.listenTo = function (listenerHash) {
+  (0, _each2.default)(listenerHash, function (callback, key) {
+    var split = key.split(' ');
+    var eventType = split[0],
+        selector = split.slice(1, split.length).join(' ');
+    // Create an unassigned listener
+    return listener(selector).on(eventType, callback);
+  });
+};
+
+// ------------------------------
+// DEPRECATED
+// Apply client.globalProperties
+// ------------------------------
+function trackExternalLink(jsEvent, eventCollection, payload, timeout, timeoutCallback) {
+  this.emit('error', 'This method has been deprecated. Check out DOM listeners: https://github.com/keen/keen-tracking.js#listeners');
+  var evt = jsEvent,
+      target = evt.currentTarget ? evt.currentTarget : evt.srcElement || evt.target,
+      timer = timeout || 500,
+      triggered = false,
+      targetAttr = '',
+      callback,
+      win;
+  if (target.getAttribute !== void 0) {
+    targetAttr = target.getAttribute('target');
+  } else if (target.target) {
+    targetAttr = target.target;
+  }
+  if ((targetAttr == '_blank' || targetAttr == 'blank') && !evt.metaKey) {
+    win = window.open('about:blank');
+    win.document.location = target.href;
+  }
+  if (target.nodeName === 'A') {
+    callback = function callback() {
+      if (!triggered && !evt.metaKey && targetAttr !== '_blank' && targetAttr !== 'blank') {
+        triggered = true;
+        window.location = target.href;
+      }
+    };
+  } else if (target.nodeName === 'FORM') {
+    callback = function callback() {
+      if (!triggered) {
+        triggered = true;
+        target.submit();
+      }
+    };
+  } else {
+    this.trigger('error', '#trackExternalLink method not attached to an <a> or <form> DOM element');
+  }
+  if (timeoutCallback) {
+    callback = function callback() {
+      if (!triggered) {
+        triggered = true;
+        timeoutCallback();
+      }
+    };
+  }
+  this.recordEvent(eventCollection, payload, callback);
+  setTimeout(callback, timer);
+  if (!evt.metaKey) {
+    return false;
   }
 }
-},{}]},{},[1]);
 
+// IE-specific polyfills, yay!
+// -----------------------------
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function (elt /*, from*/) {
+    var len = this.length >>> 0;
+
+    var from = Number(arguments[1]) || 0;
+    from = from < 0 ? Math.ceil(from) : Math.floor(from);
+    if (from < 0) from += len;
+
+    for (; from < len; from++) {
+      if (from in this && this[from] === elt) return from;
+    }
+    return -1;
+  };
+}
+
+var Keen = exports.Keen = _index2.default.extendLibrary(_index2.default);
+exports.default = Keen;
+
+/***/ })
+/******/ ]);
+});
 //# sourceMappingURL=keen-tracking.js.map
