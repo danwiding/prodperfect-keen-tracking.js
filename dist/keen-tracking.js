@@ -1289,7 +1289,21 @@ exports.getDomNodeProfile = getDomNodeProfile;
 
 var _getDomNodePath = __webpack_require__(4);
 
+var getTextContent = function getTextContent(el, options) {
+  if (!options.recordTextContent || !el.textContent) {
+    return null;
+  }
+
+  if (options.redactTextContent) {
+    return '---REDACTED---';
+  }
+
+  return el.textContent;
+};
+
 function getDomNodeProfile(el) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
   return {
     action: el.action,
     class: el.className,
@@ -1302,6 +1316,7 @@ function getDomNodeProfile(el) {
     node_name: el.nodeName,
     selector: (0, _getDomNodePath.getDomNodePath)(el),
     text: el.text,
+    textContent: getTextContent(el, options),
     title: el.title,
     type: el.type,
     x_position: el.offsetLeft || el.clientLeft || null,
@@ -1461,6 +1476,12 @@ function initAutoTrackingCore(lib) {
       shareUuidAcrossDomains: false
     }, obj);
 
+    var defaultDomElementOptions = {
+      recordTextContent: true,
+      redactTextContent: true
+    };
+    options.domElementOptions = utils.extend(defaultDomElementOptions, obj.domElementOptions);
+
     var now = new Date();
 
     var cookie = new utils.cookie('keen');
@@ -1584,7 +1605,7 @@ function initAutoTrackingCore(lib) {
       utils.listener('*').on('click', function (e) {
         var el = e.target;
         var props = {
-          element: helpers.getDomNodeProfile(el),
+          element: helpers.getDomNodeProfile(el, options.domElementOptions),
           page: {
             scroll_state: scrollState
           }
@@ -1611,7 +1632,7 @@ function initAutoTrackingCore(lib) {
             fields: fields,
             method: el.method
           },
-          element: helpers.getDomNodeProfile(el),
+          element: helpers.getDomNodeProfile(el, options.domElementOptions),
           page: {
             scroll_state: scrollState
           }
@@ -1624,7 +1645,7 @@ function initAutoTrackingCore(lib) {
       utils.listener('*').on('change', function (e) {
         var el = e.target;
         var props = {
-          element: helpers.getDomNodeProfile(el),
+          element: helpers.getDomNodeProfile(el, options.domElementOptions),
           page: {
             scroll_state: helpers.getScrollState
           }
