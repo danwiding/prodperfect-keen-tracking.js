@@ -1517,6 +1517,7 @@ function initAutoTrackingCore(lib) {
     client.extendEvents(function () {
       var browserProfile = helpers.getBrowserProfile();
       return {
+        event_uuid: helpers.getUniqueId(),
         iso_time_full: new Date().toISOString(),
         local_time_full: new Date().toString(),
         session: {
