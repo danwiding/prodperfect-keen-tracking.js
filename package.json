@@ -1,6 +1,6 @@
 {
   "name": "keen-tracking",
-  "version": "2.0.3",
+  "version": "2.0.2",
   "upstreamVersion": "2.0.1",
   "description": "Data Collection SDK for Keen IO",
   "main": "dist/node/keen-tracking.js",
@@ -11,6 +11,7 @@
   },
   "scripts": {
     "start": "NODE_ENV=development webpack-dev-server",
+    "heroku:start": "node_modules/.bin/http-server dist --p ${PORT}",
     "test": "NODE_ENV=test jest && NODE_ENV=test TEST_ENV=node jest",
     "test:watch": "NODE_ENV=test jest --watch",
     "test:node:watch": "NODE_ENV=test TEST_ENV=node jest --watch",
@@ -57,6 +58,7 @@
     "gulp-replace": "^0.5.3",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "http-server": "^0.11.1",
     "jest": "^22.4.3",
     "nock": "^9.2.6",
     "regenerator-runtime": "^0.11.1",
