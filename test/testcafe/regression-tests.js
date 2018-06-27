@@ -1,12 +1,35 @@
 import {ClientFunction, RequestLogger, Selector} from 'testcafe';
 import fs from 'fs';
+import { v4 } from 'uuid';
 
-
+let testSuiteRunId = undefined;
 const getLocation = ClientFunction(() => document.location.href);
 const script_loader_function = new Function(fs.readFileSync('./test/testcafe/test-snippet.js').toString());
+const setProdPerfectCookie = ClientFunction( (id, name, testSuiteRunId, env) => {
+  const data = {
+    test_run_data: {
+      cli_command: env.npm_lifecycle_script,
+      test_script_run_id: id,
+      test_suite_run_id: testSuiteRunId,
+      test_script: name,
+      test_suite: env.npm_package_name,
+      version: env.npm_package_version
+    }
+  }
+  const jsonData = JSON.stringify(data)
+  document.cookie = `prodperfect_test=${jsonData}; path=/`;
+});
+
 
 fixture `Test Page`
-  .page `https://cbracco.github.io/html5-test-page/`;
+  .page `https://cbracco.github.io/html5-test-page/`
+  .before( async ctx => {
+    testSuiteRunId = v4();
+  })
+  .beforeEach( async t => {
+    const testRun = t.testRun;
+    await setProdPerfectCookie(testRun.id, testRun.test.name, testSuiteRunId, process.env);
+  });
 
 const logger = RequestLogger('test.datapipe.prodperfect.com');
 
