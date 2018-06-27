@@ -1,5 +1,8 @@
 {
   "name": "ProdPerfect Keen Tracking",
+  "env": {
+    "NODE_ENV": "development"
+  },
   "formation": {
     "web": {
       "quantity": 1,
